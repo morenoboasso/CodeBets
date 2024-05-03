@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "619968142309",
+    "project_id": "codebets-bece8",
+    "storage_bucket": "codebets-bece8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619968142309:android:b0698e3c96fe6c271dad0c",
+        "android_client_info": {
+          "package_name": "com.example.codebets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN7Bq_DIxUljsQy3R06s80hGBKJZkBmGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
