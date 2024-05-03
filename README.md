@@ -1,1 +1,17 @@
 # CodeBets
+- accesso utente con nome 
+  - Moreno
+  - Lia
+  - Cesar
+  - Rob
+- Bottombar con varie sezioni:
+  - Aggiungi scommessa
+    - titolo:
+    - Risposte:
+    - Scadenza:
+    - chi l'ha creato
+  - Vedi Scommesse attive
+    - Card con le scommesse attive con i vari risultati e scadenza
+  - Classifica
+    - Classifica che si aggiorna ogni giorno e viene resettata ogni mese
+  - Ping Pong Punti
