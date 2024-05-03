@@ -50,7 +50,7 @@ class LoginPage extends StatelessWidget {
     DbService dbService = DbService();
 
     return Scaffold(
-      body:SingleChildScrollView(child: Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -97,7 +97,6 @@ class LoginPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
       ),
     );
   }
