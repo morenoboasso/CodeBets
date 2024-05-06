@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+
+import '../services/db_service.dart';
 
 class CreateBetPage extends StatefulWidget {
   const CreateBetPage({super.key});
@@ -19,10 +22,23 @@ class _CreateBetPageState extends State<CreateBetPage> {
   String _answer2 = '';
   String _answer3 = '';
   String _answer4 = '';
+  String? _selectedUser;
+  List<String> _usersList = [];
+
+
 
   @override
   void initState() {
     super.initState();
+    _loadUsers();
+  }
+
+  Future<void> _loadUsers() async {
+    DbService dbService = DbService();
+    List<String> usersList = await dbService.getUsersList();
+    setState(() {
+      _usersList = usersList;
+    });
   }
 
   @override
@@ -54,6 +70,25 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   onSaved: (newValue) {
                     _title = newValue!;
                   },
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: _selectedUser,
+                  items: _usersList.map((String user) {
+                    return DropdownMenuItem<String>(
+                      value: user,
+                      child: Text(user),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedUser = newValue;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Target (se presente)',
+                    hintText: "Per ping pong lasciare vuoto",
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -124,18 +159,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     _answer4 = newValue ?? '';
                   },
                 ),
-                const SizedBox(height: 16),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        _previewDialog();
-                      }
-                    },
-                    child: const Text('Preview Scommessa'),
-                  ),
-                ),
                 const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
@@ -148,87 +171,31 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     child: const Text('Crea Scommessa'),
                   ),
                 ),
-                FloatingActionButton(
-                  onPressed: () async {
-                    await Firebase.initializeApp();
-                    FirebaseFirestore firestore = FirebaseFirestore.instance;
-                    debugPrint("Cancellata collezione scommesse dal DB");
-                    // Cancella la collezione "scommesse"
-                    await firestore
-                        .collection('scommesse')
-                        .get()
-                        .then((querySnapshot) {
-                      for (var doc in querySnapshot.docs) {
-                        doc.reference.delete();
-                      }
-                    });
-                  },
-                  child: const Icon(Icons.delete_sweep),
-                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  //ti mostra una preview di come verrà la card
-  void _previewDialog() {
-    String? userName = GetStorage().read<String>('userName');
-    String currentDate = DateFormat('d MMMM - HH:mm').format(DateTime.now());
-    List<Widget> previewContent = [
-      Text('Titolo: $_title'),
-    ];
-
-    if (_description.isNotEmpty) {
-      previewContent.add(Text('Descrizione: $_description'));
-    }
-
-    if (_answer1.isNotEmpty) {
-      previewContent.add(Text('Risposta 1: $_answer1'));
-    }
-
-    if (_answer2.isNotEmpty) {
-      previewContent.add(Text('Risposta 2: $_answer2'));
-    }
-
-    if (_answer3.isNotEmpty) {
-      previewContent.add(Text('Risposta 3: $_answer3'));
-    }
-
-    if (_answer4.isNotEmpty) {
-      previewContent.add(Text('Risposta 4: $_answer4'));
-    }
-
-    previewContent.addAll([
-      Text('Data di creazione: $currentDate'),
-      Text('Creatore: $userName'),
-    ]);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Anteprima'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: previewContent,
-          ),
-          actions: [
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Chiudi la dialog
-                  _submit();
-                },
-                child: const Text('Crea Scommessa'),
-              ),
-            ),
-          ],
-        );
-      },
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              onPressed: () async {
+                await Firebase.initializeApp();
+                FirebaseFirestore firestore = FirebaseFirestore.instance;
+                debugPrint("Cancellata collezione scommesse dal DB");
+                // Cancella la collezione "scommesse"
+                await firestore
+                    .collection('scommesse')
+                    .get()
+                    .then((querySnapshot) {
+                  for (var doc in querySnapshot.docs) {
+                    doc.reference.delete();
+                  }
+                });
+              },
+        tooltip: "Cancella tutte le scommesse",
+              child: const Icon(Icons.delete_sweep),
+            )
+          : null,
     );
   }
 
@@ -236,6 +203,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
     String currentDate = DateFormat('d MMMM - HH:mm').format(DateTime.now());
     String? userName = GetStorage().read<String>('userName');
     debugPrint('Titolo: $_title');
+    debugPrint('Target: $_selectedUser');
     if (_description.isNotEmpty) {
       debugPrint('Descrizione: $_description');
     }
@@ -264,7 +232,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
           child: CircularProgressIndicator(
             backgroundColor: Colors.orangeAccent,
             color: Colors.orange,
-          ), // Mostra l'indicatore di caricamento
+          ),
         );
       },
     );
@@ -279,6 +247,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
     // Crea un nuovo documento nella collezione "scommesse"
     await firestore.collection('scommesse').add({
       'titolo': _title,
+      'target': _selectedUser,
       'descrizione': _description,
       'risposta1': _answer1,
       'risposta2': _answer2,
