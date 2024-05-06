@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codebets/models/bet.dart';
 import 'package:flutter/cupertino.dart';
 
 class DbService {
@@ -18,9 +19,23 @@ class DbService {
     try {
       QuerySnapshot usersSnapshot = await FirebaseFirestore.instance.collection('users').get();
       List<String> usersList = usersSnapshot.docs.map((doc) => doc.id).toList();
+      for (var element in usersList) { debugPrint(element);}
       return usersList;
     } catch (e) {
       debugPrint("Errore nel caricamento dei dati");
+      return [];
+    }
+  }
+
+  //ricuperare tutte le scommesse
+  Future<List<Bet>> getBetsList() async {
+    try {
+      QuerySnapshot betsSnapshot = await FirebaseFirestore.instance.collection('scommesse').get();
+      List<Bet> betsList = betsSnapshot.docs.map((doc) => Bet.fromMap(doc.data() as Map<String, dynamic>)).toList();
+      for (var element in betsList) { debugPrint(element.title); }
+      return betsList;
+    } catch (e) {
+      debugPrint("Errore nel recupero di scommesse");
       return [];
     }
   }
