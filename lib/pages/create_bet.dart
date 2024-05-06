@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
@@ -146,6 +148,23 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     child: const Text('Crea Scommessa'),
                   ),
                 ),
+                FloatingActionButton(
+                  onPressed: () async {
+                    await Firebase.initializeApp();
+                    FirebaseFirestore firestore = FirebaseFirestore.instance;
+                    debugPrint("Cancellata collezione scommesse dal DB");
+                    // Cancella la collezione "scommesse"
+                    await firestore
+                        .collection('scommesse')
+                        .get()
+                        .then((querySnapshot) {
+                      for (var doc in querySnapshot.docs) {
+                        doc.reference.delete();
+                      }
+                    });
+                  },
+                  child: const Icon(Icons.delete_sweep),
+                ),
               ],
             ),
           ),
@@ -213,8 +232,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
     );
   }
 
-  //todo inviare al db i dati
-  void _submit() {
+  Future<void> _submit() async {
     String currentDate = DateFormat('d MMMM - HH:mm').format(DateTime.now());
     String? userName = GetStorage().read<String>('userName');
     debugPrint('Titolo: $_title');
@@ -236,5 +254,55 @@ class _CreateBetPageState extends State<CreateBetPage> {
     if (_answer4.isNotEmpty) {
       debugPrint('Risposta 4: $_answer4');
     }
+
+    // Visualizza il  loading
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Impedisce la chiusura del dialog
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.orangeAccent,
+            color: Colors.orange,
+          ), // Mostra l'indicatore di caricamento
+        );
+      },
+    );
+
+//simulo ritardo
+    await Future.delayed(const Duration(seconds: 2));
+
+    //inizializzo db
+    await Firebase.initializeApp();
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Crea un nuovo documento nella collezione "scommesse"
+    await firestore.collection('scommesse').add({
+      'titolo': _title,
+      'descrizione': _description,
+      'risposta1': _answer1,
+      'risposta2': _answer2,
+      'risposta3': _answer3,
+      'risposta4': _answer4,
+      'data_creazione': currentDate,
+      'creatore': userName,
+    });
+
+//chiudo il loading e mostro la snackbar successo
+    Navigator.pop(context);
+    const snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.green,
+      content: Row(
+        children: [
+          Icon(Icons.check, color: Colors.white),
+          SizedBox(width: 10),
+          Text('Scommessa creata con successo!',
+              style: TextStyle(color: Colors.white)),
+        ],
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    debugPrint('Dati inviati al database Firebase con successo!');
   }
 }
