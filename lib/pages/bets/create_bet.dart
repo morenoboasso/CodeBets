@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
-import '../services/db_service.dart';
+import '../../services/db_service.dart';
 
 class CreateBetPage extends StatefulWidget {
   const CreateBetPage({super.key});
@@ -200,7 +200,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
   }
 
   Future<void> _submit() async {
-    String currentDate = DateFormat('d MMMM - HH:mm').format(DateTime.now());
+    String currentDate = DateFormat('HH:mm - d MMMM yyyy').format(DateTime.now());
     String? userName = GetStorage().read<String>('userName');
     debugPrint('Titolo: $_title');
     debugPrint('Target: $_selectedUser');
@@ -238,7 +238,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
     );
 
 //simulo ritardo
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 350));
 
     //inizializzo db
     await Firebase.initializeApp();

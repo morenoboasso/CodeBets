@@ -35,54 +35,78 @@ class _BetCardState extends State<BetCard> {
           ),
           Column(
             children: [
-              const Text('Risposte:'),
-              Column(
+              const Text('Punta su di una risposta:'),
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(widget.bet.answer1),
+                  const SizedBox(height: 10,width: 10,),
+
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(widget.bet.answer2),
-                      ),
-                    ],
+                      child: Center(child: Text(widget.bet.answer1)),
+                    ),
                   ),
-                  Row(
-                    children: [
-                      (widget.bet.answer3 == '')
-                          ? Container()
-                          : Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(widget.bet.answer3),
-                            ),
-                      (widget.bet.answer4 == '')
-                          ? Container()
-                          : Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(widget.bet.answer4),
-                            ),
-                    ],
-                  )
+                  const SizedBox(height: 10,width: 10,),
+
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(child: Text(widget.bet.answer2)),
+                    ),
+                  ),
+                  const SizedBox(height: 10,width: 10,),
+
                 ],
               ),
-              Text(widget.bet.creationDate),
+              const SizedBox(height: 10,width: 10,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(height: 10,width: 10,),
+
+                  Expanded(
+                    flex: 1,
+                    child: widget.bet.answer3.isEmpty
+                        ? Container()
+                        : Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(child: Text(widget.bet.answer3)),
+                    ),
+                  ),
+                  const SizedBox(height: 10,width: 10,),
+                  Expanded(
+                    flex: 1,
+                    child: widget.bet.answer4.isEmpty
+                        ? Container()
+                        : Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(child: Text(widget.bet.answer4)),
+                    ),
+                  ),
+                  const SizedBox(height: 10,width: 10,),
+
+                ],
+              ),
             ],
-          )
+          ),
+          Text(widget.bet.creationDate),
         ],
       ),
     );

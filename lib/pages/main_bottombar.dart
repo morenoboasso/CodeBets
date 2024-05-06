@@ -1,10 +1,9 @@
 import 'package:codebets/pages/ping_pong.dart';
 import 'package:flutter/material.dart';
 
-import 'active_bets.dart';
-import 'create_bet.dart';
+import 'bets/active_bets.dart';
+import 'bets/create_bet.dart';
 import 'leaderboard.dart';
-
 
 class BottomNavigationBarWidget extends StatefulWidget {
   const BottomNavigationBarWidget({super.key});
@@ -16,6 +15,7 @@ class BottomNavigationBarWidget extends StatefulWidget {
 
 class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   int _selectedIndex = 0;
+  bool _createBetRequested = false; // Flag per indicare se è stata richiesta la creazione di una nuova scommessa
 
   static final List<Widget> _widgetOptions = <Widget>[
     CreateBetPage(),
@@ -25,6 +25,15 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   ];
 
   void _onItemTapped(int index) {
+    // Se l'utente ha richiesto di creare una nuova scommessa, andiamo alla tab delle scommesse attive
+    if (_createBetRequested) {
+      _createBetRequested = false; // Resettiamo il flag
+      setState(() {
+        _selectedIndex = 1; // Vai alla tab delle scommesse attive
+      });
+      return;
+    }
+
     setState(() {
       _selectedIndex = index;
     });

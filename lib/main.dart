@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 //login
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -54,6 +53,8 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+             Image(image: const AssetImage("assets/logo.png"),
+                 width:MediaQuery.of(context).size.width * 0.8,),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.7,
               child: TextField(
@@ -75,8 +76,7 @@ class LoginPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 // Controlla se il nome utente esiste nel database
-                bool nameExists =
-                await dbService.checkUserNameExists(userName);
+                bool nameExists = await dbService.checkUserNameExists(userName);
                 if (nameExists) {
                   // Naviga alla schermata principale
                   Get.offNamed(AppRoutes.mainScreen);
@@ -87,7 +87,10 @@ class LoginPage extends StatelessWidget {
                   Get.snackbar(
                     'Accesso Fallito',
                     'Sei così stupido che non sai il tuo nome?',
-                    icon: const Icon(Icons.error_sharp,color: Colors.white,),
+                    icon: const Icon(
+                      Icons.error_sharp,
+                      color: Colors.white,
+                    ),
                     backgroundColor: Colors.red,
                     colorText: Colors.white,
                   );
@@ -101,4 +104,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
