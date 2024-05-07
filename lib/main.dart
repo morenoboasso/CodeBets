@@ -1,3 +1,4 @@
+import 'package:codebets/controllers/bet_controller.dart';
 import 'package:codebets/routes.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ void main() async {
     // Altrimenti, mostra la schermata di login
     runApp(const MyApp(initialRoute: AppRoutes.login));
   }
+
+  Get.put(BetController());
 }
 
 class MyApp extends StatelessWidget {
