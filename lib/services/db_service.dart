@@ -47,7 +47,7 @@ class DbService {
     }
   }
 
-
+//prende i dati degli utenti
   Future<Map<String, dynamic>> getUsersData() async {
     try {
       QuerySnapshot usersSnapshot =
@@ -71,5 +71,23 @@ class DbService {
       return {};
     }
   }
+
+  Future<void> resetUserData(String userName) async {
+    try {
+      // Ottieni il riferimento al documento dell'utente nel database
+      DocumentReference userRef =
+      FirebaseFirestore.instance.collection('users').doc(userName);
+      debugPrint("Cancellato punteggio e scommesse create");
+
+      // Aggiorna i valori di score e scommesse_create a zero
+      await userRef.update({
+        'score': 0,
+        'scommesse_create': 0,
+      });
+    } catch (e) {
+      debugPrint("Errore durante il reset dei dati utente: $e");
+    }
+  }
+
 
 }

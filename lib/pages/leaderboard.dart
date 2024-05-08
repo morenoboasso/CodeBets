@@ -97,8 +97,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               ],
             ),
             child: CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(userPfp,scale: 100),
+              backgroundColor: Colors.transparent,
+              backgroundImage: NetworkImage(userPfp ?? "https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369",scale: 100),
             ),
           ),
           title: Text(userName),
