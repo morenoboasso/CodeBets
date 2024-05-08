@@ -72,17 +72,19 @@ class DbService {
     }
   }
 
+//resetta tutti i dati di un uteente
   Future<void> resetUserData(String userName) async {
     try {
       // Ottieni il riferimento al documento dell'utente nel database
       DocumentReference userRef =
       FirebaseFirestore.instance.collection('users').doc(userName);
-      debugPrint("Cancellato punteggio e scommesse create");
+      debugPrint("Cancellate statistiche");
 
-      // Aggiorna i valori di score e scommesse_create a zero
       await userRef.update({
         'score': 0,
         'scommesse_create': 0,
+        'scommesse_vinte': 0,
+        'scommesse_perse': 0,
       });
     } catch (e) {
       debugPrint("Errore durante il reset dei dati utente: $e");
