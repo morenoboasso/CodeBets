@@ -31,6 +31,7 @@ class DbService {
     }
   }
 
+
   //ricuperare tutte le scommesse
   Future<List<Bet>> getBetsList() async {
     try {
@@ -45,4 +46,29 @@ class DbService {
       return [];
     }
   }
+
+  Future<Map<String, int>> getUsersScores() async {
+    try {
+      QuerySnapshot usersSnapshot =
+      await FirebaseFirestore.instance.collection('users').get();
+      Map<String, int> usersScores = {};
+
+      // Itera su ogni documento utente per recuperare il punteggio
+      for (var doc in usersSnapshot.docs) {
+        // Ottieni il nome utente
+        String userName = doc.id;
+        // Ottieni il punteggio
+        int score = doc['score'] ?? 0; // Se il punteggio non è presente, assume 0
+
+        // Aggiungi il punteggio alla mappa dei punteggi degli utenti
+        usersScores[userName] = score;
+      }
+
+      return usersScores;
+    } catch (e) {
+      debugPrint("Errore nel recupero degli scores degli utenti: $e");
+      return {};
+    }
+  }
+
 }
