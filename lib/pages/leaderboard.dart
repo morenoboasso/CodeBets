@@ -11,28 +11,30 @@ class LeaderboardPage extends StatefulWidget {
 enum OrderBy { highestScore, lowestScore }
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
-  Map<String, int> _usersScores = {};
+  Map<String, dynamic> _usersData = {};
   OrderBy _orderBy = OrderBy.highestScore;
 
   @override
   void initState() {
     super.initState();
-    // Recupera gli scores degli utenti quando la pagina viene creata
-    _fetchUsersScores();
+    // Recupera gli scores e le immagini dei profili degli utenti quando la pagina viene creata
+    _fetchUsersData();
   }
 
-  Future<void> _fetchUsersScores() async {
-    // Utilizza il metodo getUsersScores() del tuo servizio database
-    Map<String, int> usersScores = await DbService().getUsersScores();
-    // Aggiorna lo stato con i punteggi degli utenti
+  Future<void> _fetchUsersData() async {
+    // Utilizza il metodo getUsersData() del tuo servizio database
+    Map<String, dynamic> usersData = await DbService().getUsersData();
+    // Aggiorna lo stato con i dati degli utenti
     setState(() {
-      _usersScores = usersScores;
+      _usersData = usersData;
     });
   }
 
   List<MapEntry<String, int>> _getSortedUsers() {
     // Ordina la mappa degli scores degli utenti in base al punteggio
-    List<MapEntry<String, int>> sortedUsers = _usersScores.entries.toList();
+    List<MapEntry<String, int>> sortedUsers = _usersData.entries
+        .map((entry) => MapEntry<String, int>(entry.key, entry.value['score']))
+        .toList();
     if (_orderBy == OrderBy.highestScore) {
       sortedUsers.sort((a, b) => b.value.compareTo(a.value));
     } else {
@@ -53,7 +55,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 _orderBy = result;
               });
             },
-            icon: const Icon(Icons.filter_alt_sharp),
+            icon: const Icon(Icons.filter_list),
             tooltip: "Filtra",
             itemBuilder: (BuildContext context) => <PopupMenuEntry<OrderBy>>[
               const PopupMenuItem<OrderBy>(
@@ -80,7 +82,25 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       itemBuilder: (context, index) {
         final userName = sortedUsers[index].key;
         final score = sortedUsers[index].value;
+        final userPfp = _usersData[userName]['pfp'];
         return ListTile(
+          leading: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1.5,
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkImage(userPfp,scale: 100),
+            ),
+          ),
           title: Text(userName),
           trailing: Text('Punteggio: $score'),
         );

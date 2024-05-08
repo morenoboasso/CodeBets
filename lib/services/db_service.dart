@@ -47,26 +47,27 @@ class DbService {
     }
   }
 
-  Future<Map<String, int>> getUsersScores() async {
+
+  Future<Map<String, dynamic>> getUsersData() async {
     try {
       QuerySnapshot usersSnapshot =
       await FirebaseFirestore.instance.collection('users').get();
-      Map<String, int> usersScores = {};
+      Map<String, dynamic> usersData = {};
 
-      // Itera su ogni documento utente per recuperare il punteggio
+      // Itera su ogni documento utente per recuperare i dati
       for (var doc in usersSnapshot.docs) {
         // Ottieni il nome utente
         String userName = doc.id;
-        // Ottieni il punteggio
-        int score = doc['score'] ?? 0; // Se il punteggio non è presente, assume 0
+        // Ottieni i dati dell'utente
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
 
-        // Aggiungi il punteggio alla mappa dei punteggi degli utenti
-        usersScores[userName] = score;
+        // Aggiungi i dati dell'utente alla mappa
+        usersData[userName] = userData;
       }
 
-      return usersScores;
+      return usersData;
     } catch (e) {
-      debugPrint("Errore nel recupero degli scores degli utenti: $e");
+      debugPrint("Errore nel recupero dei dati degli utenti: $e");
       return {};
     }
   }
