@@ -1,4 +1,5 @@
 import 'package:codebets/pages/ping_pong.dart';
+import 'package:codebets/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 import 'bets/active_bets.dart';
@@ -18,10 +19,11 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   bool _createBetRequested = false; // Flag per indicare se è stata richiesta la creazione di una nuova scommessa
 
   static final List<Widget> _widgetOptions = <Widget>[
-    CreateBetPage(),
     ActiveBetsPage(),
+    CreateBetPage(),
     LeaderboardPage(),
     PingPongPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -46,12 +48,12 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_add),
-            label: 'Aggiungi',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on_rounded),
             label: 'Attive',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_add),
+            label: 'Aggiungi',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.emoji_events),
@@ -60,6 +62,10 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
           BottomNavigationBarItem(
             icon: Icon(Icons.sports),
             label: 'Ping Pong',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profilo',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -72,3 +78,5 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     );
   }
 }
+
+

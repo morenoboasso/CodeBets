@@ -31,6 +31,7 @@ class DbService {
     }
   }
 
+
   //ricuperare tutte le scommesse
   Future<List<Bet>> getBetsList() async {
     try {
@@ -45,4 +46,50 @@ class DbService {
       return [];
     }
   }
+
+//prende i dati degli utenti
+  Future<Map<String, dynamic>> getUsersData() async {
+    try {
+      QuerySnapshot usersSnapshot =
+      await FirebaseFirestore.instance.collection('users').get();
+      Map<String, dynamic> usersData = {};
+
+      // Itera su ogni documento utente per recuperare i dati
+      for (var doc in usersSnapshot.docs) {
+        // Ottieni il nome utente
+        String userName = doc.id;
+        // Ottieni i dati dell'utente
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+
+        // Aggiungi i dati dell'utente alla mappa
+        usersData[userName] = userData;
+      }
+
+      return usersData;
+    } catch (e) {
+      debugPrint("Errore nel recupero dei dati degli utenti: $e");
+      return {};
+    }
+  }
+
+//resetta tutti i dati di un uteente
+  Future<void> resetUserData(String userName) async {
+    try {
+      // Ottieni il riferimento al documento dell'utente nel database
+      DocumentReference userRef =
+      FirebaseFirestore.instance.collection('users').doc(userName);
+      debugPrint("Cancellate statistiche");
+
+      await userRef.update({
+        'score': 0,
+        'scommesse_create': 0,
+        'scommesse_vinte': 0,
+        'scommesse_perse': 0,
+      });
+    } catch (e) {
+      debugPrint("Errore durante il reset dei dati utente: $e");
+    }
+  }
+
+
 }

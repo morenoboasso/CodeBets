@@ -222,6 +222,11 @@ class _CreateBetPageState extends State<CreateBetPage> {
     if (_answer4.isNotEmpty) {
       debugPrint('Risposta 4: $_answer4');
     }
+    // Ottieni il riferimento al documento dell'utente nel database
+    DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(userName);
+
+    // Incrementa il conteggio delle scommesse create per l'utente
+    await userRef.update({'scommesse_create': FieldValue.increment(1)});
 
     // Visualizza il  loading
     showDialog(
