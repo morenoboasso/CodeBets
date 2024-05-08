@@ -19,8 +19,8 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   bool _createBetRequested = false; // Flag per indicare se è stata richiesta la creazione di una nuova scommessa
 
   static final List<Widget> _widgetOptions = <Widget>[
-    CreateBetPage(),
     ActiveBetsPage(),
+    CreateBetPage(),
     LeaderboardPage(),
     PingPongPage(),
     ProfilePage(),
@@ -48,12 +48,12 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_add),
-            label: 'Aggiungi',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on_rounded),
             label: 'Attive',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_add),
+            label: 'Aggiungi',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.emoji_events),
