@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/db_service.dart';
+import '../widgets/user_stats.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
@@ -83,26 +84,46 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         final userName = sortedUsers[index].key;
         final score = sortedUsers[index].value;
         final userPfp = _usersData[userName]['pfp'];
-        return ListTile(
-          leading: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 1.5,
-                  blurRadius: 2,
-                  offset: const Offset(0, 1),
-                ),
-              ],
+        final scommesseCreate = _usersData[userName]['scommesse_create'];
+        final scommesseVinte = _usersData[userName]['scommesse_vinte'];
+        final scommessePerse = _usersData[userName]['scommesse_perse'];
+        return GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return UserModal(
+                  userPfp: userPfp,
+                  userName: userName,
+                  score: score,
+                  scommesseCreate: scommesseCreate,
+                  scommesseVinte: scommesseVinte,
+                  scommessePerse: scommessePerse,
+                );
+              },
+            );
+          },
+          child: ListTile(
+            leading: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 1.5,
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                backgroundImage: NetworkImage(userPfp ?? "https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369",scale: 100),
+              ),
             ),
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              backgroundImage: NetworkImage(userPfp ?? "https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369",scale: 100),
-            ),
+            title: Text(userName),
+            trailing: Text('Punteggio: $score'),
           ),
-          title: Text(userName),
-          trailing: Text('Punteggio: $score'),
         );
       },
     );
