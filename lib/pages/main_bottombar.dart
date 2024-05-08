@@ -1,4 +1,5 @@
 import 'package:codebets/pages/ping_pong.dart';
+import 'package:codebets/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 import 'bets/active_bets.dart';
@@ -22,6 +23,7 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     ActiveBetsPage(),
     LeaderboardPage(),
     PingPongPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -61,6 +63,10 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
             icon: Icon(Icons.sports),
             label: 'Ping Pong',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profilo',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.orangeAccent,
@@ -72,3 +78,5 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     );
   }
 }
+
+
