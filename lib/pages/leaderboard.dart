@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../services/db_service.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -9,8 +8,11 @@ class LeaderboardPage extends StatefulWidget {
   _LeaderboardPageState createState() => _LeaderboardPageState();
 }
 
+enum OrderBy { highestScore, lowestScore }
+
 class _LeaderboardPageState extends State<LeaderboardPage> {
   Map<String, int> _usersScores = {};
+  OrderBy _orderBy = OrderBy.highestScore;
 
   @override
   void initState() {
@@ -28,20 +30,50 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     });
   }
 
+  List<MapEntry<String, int>> _getSortedUsers() {
+    // Ordina la mappa degli scores degli utenti in base al punteggio
+    List<MapEntry<String, int>> sortedUsers = _usersScores.entries.toList();
+    if (_orderBy == OrderBy.highestScore) {
+      sortedUsers.sort((a, b) => b.value.compareTo(a.value));
+    } else {
+      sortedUsers.sort((a, b) => a.value.compareTo(b.value));
+    }
+    return sortedUsers;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classifica'),
+        title: const Text('Classifica'),
+        actions: [
+          PopupMenuButton<OrderBy>(
+            onSelected: (OrderBy result) {
+              setState(() {
+                _orderBy = result;
+              });
+            },
+            icon: const Icon(Icons.filter_alt_sharp),
+            tooltip: "Filtra",
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<OrderBy>>[
+              const PopupMenuItem<OrderBy>(
+                value: OrderBy.highestScore,
+                child: Text('Punteggio più alto'),
+              ),
+              const PopupMenuItem<OrderBy>(
+                value: OrderBy.lowestScore,
+                child: Text('Punteggio più basso'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: _buildLeaderboard(),
     );
   }
 
   Widget _buildLeaderboard() {
-    // Ordina la mappa degli scores degli utenti in base al punteggio
-    List<MapEntry<String, int>> sortedUsers = _usersScores.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    List<MapEntry<String, int>> sortedUsers = _getSortedUsers();
 
     return ListView.builder(
       itemCount: sortedUsers.length,
