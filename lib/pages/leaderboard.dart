@@ -78,7 +78,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   Widget _buildLeaderboard() {
     List<MapEntry<String, int>> sortedUsers = _getSortedUsers();
 
-    return ListView.builder(
+    return RefreshIndicator(
+        onRefresh: _fetchUsersData,
+        child: ListView.builder(
       itemCount: sortedUsers.length,
       itemBuilder: (context, index) {
         final userName = sortedUsers[index].key;
@@ -126,6 +128,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           ),
         );
       },
+        ),
     );
   }
 }
