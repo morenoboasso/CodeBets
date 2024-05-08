@@ -34,6 +34,11 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
     });
   }
 
+  Future<void> _refresh() async {
+    // Qui puoi chiamare la funzione per ricaricare i dati
+    await _loadBets();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -57,36 +62,43 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-        child: _betList.isEmpty
-            ? const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("☹️ Nessuna scommessa al momento."),
-            ],
-          ),
-        )
-            : GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-          ),
-          itemCount: _betList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: InkWell(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+        child: RefreshIndicator(
+          onRefresh: _refresh,
+          child: GridView.builder(
+            gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+            ),
+            itemCount: _betList.isEmpty ? 1 : _betList.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (_betList.isEmpty) {
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("☹️ Nessuna scommessa al momento.."),
+                      SizedBox(height: 20),
+                    ],
                   ),
-                  child: BetCard(
-                    bet: _betList[index],
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: BetCard(
+                        bet: _betList[index],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          },
+                );
+              }
+            },
+          ),
         ),
       ),
     );
