@@ -25,7 +25,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
   String? _selectedUser;
   List<String> _usersList = [];
 
-
+  DbService dbService = DbService();
 
   @override
   void initState() {
@@ -245,12 +245,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
 //simulo ritardo
     await Future.delayed(const Duration(milliseconds: 350));
 
-    //inizializzo db
-    await Firebase.initializeApp();
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // Crea un nuovo documento nella collezione "scommesse"
-    await firestore.collection('scommesse').add({
+    DocumentReference betRef = await FirebaseFirestore.instance.collection('scommesse').add({
       'titolo': _title,
       'target': _selectedUser,
       'descrizione': _description,
@@ -261,6 +258,18 @@ class _CreateBetPageState extends State<CreateBetPage> {
       'data_creazione': currentDate,
       'creatore': userName,
     });
+
+    String betId = betRef.id;
+
+    // Crea le risposte associate alla scommessa nel database
+    List<String> usersList = await dbService.getUsersList();
+    for (String user in usersList) {
+      await FirebaseFirestore.instance.collection('risposte').add({
+        'scommessa_id': betId,
+        'utente': user,
+        'risposta_scelta': '',
+      });
+    }
 
 //chiudo il loading e mostro la snackbar successo
     Navigator.pop(context);

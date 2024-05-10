@@ -13,7 +13,7 @@ class _PingPongPageState extends State<PingPongPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
         Expanded(
           flex: 1,
