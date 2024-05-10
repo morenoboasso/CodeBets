@@ -141,7 +141,7 @@ class _BetCardState extends State<BetCard> {
             ),
             child: Center(child: Text(
               answer,
-              style: selectedAnswer == answer ? const TextStyle(fontWeight: FontWeight.bold,fontSize: 16) : TextStyle(color: Colors.black.withOpacity(0.6) ) )),
+              style: selectedAnswer == answer ? const TextStyle(fontWeight: FontWeight.bold,fontSize: 16) : TextStyle(color: Colors.black.withOpacity(0.8) ) )),
           ),
         ),
       );

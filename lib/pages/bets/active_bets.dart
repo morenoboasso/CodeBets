@@ -46,7 +46,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
 
   Future<void> _refresh() async {
     setState(() {
-      _isLoading = true; // Reimposta lo stato di caricamento
+      _isLoading = true;
     });
     await _loadBets();
   }

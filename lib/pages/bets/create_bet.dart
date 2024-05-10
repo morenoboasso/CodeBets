@@ -197,7 +197,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
         },
         tooltip: "Cancella tutte le scommesse e le risposte",
         icon: const Icon(Icons.delete_sweep),
-        label: const Text('Cancella tutto'),
+        label: const Text('Clear Scommesse'),
       )
           : null,
 
