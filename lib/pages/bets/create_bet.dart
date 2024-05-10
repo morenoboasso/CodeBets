@@ -177,25 +177,30 @@ class _CreateBetPageState extends State<CreateBetPage> {
         ),
       ),
       floatingActionButton: kDebugMode
-          ? FloatingActionButton(
-              onPressed: () async {
-                await Firebase.initializeApp();
-                FirebaseFirestore firestore = FirebaseFirestore.instance;
-                debugPrint("Cancellata collezione scommesse dal DB");
-                // Cancella la collezione "scommesse"
-                await firestore
-                    .collection('scommesse')
-                    .get()
-                    .then((querySnapshot) {
-                  for (var doc in querySnapshot.docs) {
-                    doc.reference.delete();
-                  }
-                });
-              },
-        tooltip: "Cancella tutte le scommesse",
-              child: const Icon(Icons.delete_sweep),
-            )
+          ? FloatingActionButton.extended(
+        onPressed: () async {
+          await Firebase.initializeApp();
+          FirebaseFirestore firestore = FirebaseFirestore.instance;
+          debugPrint("Cancellata collezione scommesse e risposte dal DB");
+          // Cancella la collezione "scommesse"
+          await firestore.collection('scommesse').get().then((querySnapshot) {
+            for (var doc in querySnapshot.docs) {
+              doc.reference.delete();
+            }
+          });
+          // Cancella la collezione "risposte"
+          await firestore.collection('risposte').get().then((querySnapshot) {
+            for (var doc in querySnapshot.docs) {
+              doc.reference.delete();
+            }
+          });
+        },
+        tooltip: "Cancella tutte le scommesse e le risposte",
+        icon: const Icon(Icons.delete_sweep),
+        label: const Text('Cancella tutto'),
+      )
           : null,
+
     );
   }
 

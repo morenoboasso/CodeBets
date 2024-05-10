@@ -54,7 +54,6 @@ class _BetCardState extends State<BetCard> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -70,65 +69,79 @@ class _BetCardState extends State<BetCard> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          if (widget.bet.description.isNotEmpty)
           Text(widget.bet.description),
+          if (widget.bet.target.isNotEmpty)
+            Text(
+              'Target: ${widget.bet.target}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+
+          Column(
+            children: [
+              const Text('Scegli una risposta:'),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(width: 20,),
+
+                  _buildAnswerContainer(widget.bet.answer1, Colors.orangeAccent),
+                  const SizedBox(width: 20,),
+                  _buildAnswerContainer(widget.bet.answer2, Colors.orangeAccent),
+                  const SizedBox(width: 20,),
+
+                ],
+              ),
+              const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(width: 20,),
+                      _buildAnswerContainer(widget.bet.answer3, Colors.orangeAccent),
+                      const SizedBox(width: 20,),
+                      _buildAnswerContainer(widget.bet.answer4, Colors.orangeAccent),
+                      const SizedBox(width: 20,),
+                    ],
+                  ),
+            ],
+          ),
+          if (selectedAnswer != null && selectedAnswer!.isNotEmpty)
+            ElevatedButton(
+              onPressed: confirmSelection,
+              child: const Text('Conferma'),
+            ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
                 'Creatore: ${widget.bet.creator}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text(
-                'Target: ${widget.bet.target}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text(widget.bet.creationDate),
+
             ],
           ),
-          Column(
-            children: [
-              const Text('Punta su di una risposta:'),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildAnswerContainer(widget.bet.answer1),
-                  _buildAnswerContainer(widget.bet.answer2),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildAnswerContainer(widget.bet.answer3),
-                  _buildAnswerContainer(widget.bet.answer4),
-                ],
-              ),
-            ],
-          ),
-          if (selectedAnswer != null)
-            ElevatedButton(
-              onPressed: confirmSelection,
-              child: const Text('Conferma'),
-            ),
-          Text(widget.bet.creationDate),
         ],
       ),
     );
   }
 
-  Widget _buildAnswerContainer(String answer) {
+  Widget _buildAnswerContainer(String answer, Color color) {
     if (answer.isNotEmpty) {
       return Expanded(
         child: GestureDetector(
           onTap: () => selectAnswer(answer),
           child: Container(
+            height: 50,
             decoration: BoxDecoration(
-              border: Border.all(
-                color: selectedAnswer == answer ? Colors.blue : Colors.black,
-              ),
-              borderRadius: BorderRadius.circular(5),
+              color: selectedAnswer == answer ? color.withOpacity(1) : color.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Center(child: Text(answer)),
+            child: Center(child: Text(
+              answer,
+              style: selectedAnswer == answer ? const TextStyle(fontWeight: FontWeight.bold,fontSize: 16) : TextStyle(color: Colors.black.withOpacity(0.6) ) )),
           ),
         ),
       );

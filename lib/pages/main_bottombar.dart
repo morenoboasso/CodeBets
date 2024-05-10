@@ -22,7 +22,7 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     const ActiveBetsPage(),
     const CreateBetPage(),
     const LeaderboardPage(),
-    PingPongPage(),
+    const PingPongPage(),
     const ProfilePage(),
   ];
 
