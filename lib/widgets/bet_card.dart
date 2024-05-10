@@ -17,6 +17,21 @@ class _BetCardState extends State<BetCard> {
   String? selectedAnswer;
   DbService dbService = DbService();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadUserAnswer();
+  }
+
+  Future<void> _loadUserAnswer() async {
+    String? userName = GetStorage().read<String>('userName');
+    String betId = widget.bet.id;
+    String? userAnswer = await dbService.getUserAnswerForBet(betId, userName!);
+    setState(() {
+      selectedAnswer = userAnswer;
+    });
+  }
+
   void selectAnswer(String answer) {
     setState(() {
       selectedAnswer = answer;
@@ -25,21 +40,16 @@ class _BetCardState extends State<BetCard> {
 
   void confirmSelection() async {
     if (selectedAnswer != null) {
-      // Ottieni il nome utente dall'archiviazione locale
       String? userName = GetStorage().read<String>('userName');
 
       // Ottieni l'ID della scommessa
-      String betId = widget.bet.id; // Assumi che la classe Bet abbia un campo "id"
+      String betId = widget.bet.id;
 
       // Invia la risposta al database
       await dbService.updateAnswer(betId, userName!, selectedAnswer!);
 
-      // Aggiorna lo stato o esegui altre azioni necessarie
-
-      // Stampa un messaggio di debug
       debugPrint('Risposta inviata al database con successo!');
     } else {
-      // Gestisci il caso in cui nessuna risposta è stata selezionata
       debugPrint('Seleziona una risposta prima di confermare!');
     }
   }
