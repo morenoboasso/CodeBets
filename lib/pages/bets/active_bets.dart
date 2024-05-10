@@ -86,7 +86,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("☹️ Nessuna scommessa al momento.."),
+                Text("Nessuna scommessa al momento"),
                 SizedBox(height: 20),
               ],
             ),
