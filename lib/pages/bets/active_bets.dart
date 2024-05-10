@@ -29,13 +29,19 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       betList = betList.where((bet) => bet.target != storedUserName).toList();
     }
 
+    // Recupera le risposte dell'utente per le scommesse attive
+    Map<String, String> userAnswers = {};
+    for (var bet in betList) {
+      String? userAnswer = await dbService.getUserAnswerForBet(bet.id, storedUserName!);
+      userAnswers[bet.id] = userAnswer!;
+    }
+
     setState(() {
       _betList = betList;
     });
   }
 
   Future<void> _refresh() async {
-    // Qui puoi chiamare la funzione per ricaricare i dati
     await _loadBets();
   }
 
@@ -50,15 +56,6 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scommesse Attive'),
-        actions: <Widget>[
-          IconButton(
-            tooltip: "Storico scommesse",
-            icon: const Icon(Icons.history_rounded),
-            onPressed: () {
-              //todo: gestire hystory
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),

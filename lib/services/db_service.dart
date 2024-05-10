@@ -36,10 +36,10 @@ class DbService {
   Future<List<Bet>> getBetsList() async {
     try {
       QuerySnapshot betsSnapshot =
-          await FirebaseFirestore.instance.collection('scommesse').get();
-      List<Bet> betsList = betsSnapshot.docs
-          .map((doc) => Bet.fromMap(doc.data() as Map<String, dynamic>))
-          .toList();
+      await FirebaseFirestore.instance.collection('scommesse').get();
+      List<Bet> betsList = betsSnapshot.docs.map((doc) {
+        return Bet.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
       return betsList;
     } catch (e) {
       debugPrint("Errore nel recupero di scommesse");
@@ -91,5 +91,51 @@ class DbService {
     }
   }
 
+  Future<void> updateAnswer(String betId, String userName, String answer) async {
+    try {
+      // Ottieni il riferimento al documento della risposta nel database
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .where('utente', isEqualTo: userName)
+          .get();
+
+      // Verifica se esiste una risposta per l'utente e la scommessa corrispondenti
+      if (querySnapshot.docs.isNotEmpty) {
+        // Aggiorna il campo 'risposta_scelta' nel documento esistente
+        DocumentSnapshot doc = querySnapshot.docs.first;
+        await doc.reference.update({'risposta_scelta': answer});
+      } else {
+        // Se non esiste, crea un nuovo documento per l'utente e la scommessa corrispondenti
+        await FirebaseFirestore.instance.collection('risposte').add({
+          'scommessa_id': betId,
+          'utente': userName,
+          'risposta_scelta': answer,
+        });
+      }
+    } catch (e) {
+      debugPrint("Errore durante l'aggiornamento della risposta: $e");
+    }
+  }
+
+  Future<String?> getUserAnswerForBet(String betId, String userName) async {
+    try {
+      // Ottieni il riferimento al documento della risposta nel database
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .where('utente', isEqualTo: userName)
+          .get();
+
+      // Se esiste una risposta per l'utente e la scommessa corrispondenti, restituisci la risposta
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.get('risposta_scelta');
+      } else {
+        // Se non esiste una risposta, restituisci null
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Errore durante il recupero della risposta dell'utente: $e");
+      return null;
+    }
+  }
 
 }

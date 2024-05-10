@@ -1,4 +1,5 @@
 class Bet {
+  String id;
   String creator;
   String creationDate;
   String description;
@@ -10,6 +11,7 @@ class Bet {
   String title;
 
   Bet({
+    required this.id,
     required this.creator,
     required this.creationDate,
     required this.description,
@@ -21,8 +23,9 @@ class Bet {
     required this.title,
   });
 
-  factory Bet.fromMap(Map<String, dynamic> map) {
+  factory Bet.fromMap(String id, Map<String, dynamic> map) {
     return Bet(
+      id: id,
       creator: map['creatore'] ?? '',
       creationDate: map['data_creazione'] ?? '',
       description: map['descrizione'] ?? '',

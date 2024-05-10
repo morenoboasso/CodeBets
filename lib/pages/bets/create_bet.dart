@@ -248,13 +248,13 @@ class _CreateBetPageState extends State<CreateBetPage> {
 
     // Crea un nuovo documento nella collezione "scommesse"
     DocumentReference betRef = await FirebaseFirestore.instance.collection('scommesse').add({
-      'titolo': _title,
+      'titolo': _title.trim(),
       'target': _selectedUser,
-      'descrizione': _description,
-      'risposta1': _answer1,
-      'risposta2': _answer2,
-      'risposta3': _answer3,
-      'risposta4': _answer4,
+      'descrizione': _description.trim(),
+      'risposta1': _answer1.trim(),
+      'risposta2': _answer2.trim(),
+      'risposta3': _answer3.trim(),
+      'risposta4': _answer4.trim(),
       'data_creazione': currentDate,
       'creatore': userName,
     });
