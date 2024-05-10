@@ -11,6 +11,7 @@ class BetCard extends StatefulWidget {
 }
 
 class _BetCardState extends State<BetCard> {
+
   @override
   Widget build(BuildContext context) {
     return Card(
