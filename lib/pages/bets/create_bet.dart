@@ -70,8 +70,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   onSaved: (newValue) {
                     _title = newValue!;
                   },
+                  maxLength: 70,
                 ),
-                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: _selectedUser,
                   items: _usersList.map((String user) {
@@ -94,16 +94,15 @@ class _CreateBetPageState extends State<CreateBetPage> {
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Descrizione',
-                    hintText:
-                        "Es. Chi dimenticherà qualcosa nella sala ping pong?",
+                    hintText: "Es. Chi dimenticherà qualcosa nella sala ping pong?",
                     hintStyle: TextStyle(fontSize: 12),
                   ),
                   onChanged: (value) {
                     _description = value;
                   },
-                  maxLines: null, // Per consentire più righe di testo
+                  maxLines: null,
+                  maxLength: 150,
                 ),
-                const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Risposta 1*',
@@ -119,8 +118,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   onSaved: (newValue) {
                     _answer1 = newValue!;
                   },
+                  maxLength: 20,
                 ),
-                const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Risposta 2*',
@@ -136,8 +135,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   onSaved: (newValue) {
                     _answer2 = newValue!;
                   },
+                  maxLength: 20,
                 ),
-                const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Risposta 3',
@@ -147,8 +146,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   onSaved: (newValue) {
                     _answer3 = newValue ?? '';
                   },
+                  maxLength: 20,
+
                 ),
-                const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Risposta 4',
@@ -158,8 +158,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   onSaved: (newValue) {
                     _answer4 = newValue ?? '';
                   },
+                  maxLength: 20,
+
                 ),
-                const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -197,7 +198,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
         },
         tooltip: "Cancella tutte le scommesse e le risposte",
         icon: const Icon(Icons.delete_sweep),
-        label: const Text('Clear Scommesse'),
+        label: const Text('Clear'),
       )
           : null,
 
