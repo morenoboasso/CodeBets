@@ -62,7 +62,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     hintStyle: TextStyle(fontSize: 12),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Inserisci il titolo della scommessa';
                     }
                     return null;
@@ -110,7 +110,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     hintStyle: TextStyle(fontSize: 12),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Inserisci la prima risposta';
                     }
                     return null;
@@ -127,7 +127,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     hintStyle: TextStyle(fontSize: 12),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Inserisci la seconda risposta';
                     }
                     return null;
