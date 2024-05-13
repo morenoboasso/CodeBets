@@ -129,7 +129,6 @@ class DbService {
       if (querySnapshot.docs.isNotEmpty) {
         return querySnapshot.docs.first.get('risposta_scelta');
       } else {
-        // Se non esiste una risposta, restituisci null
         return null;
       }
     } catch (e) {

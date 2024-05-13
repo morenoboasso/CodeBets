@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codebets/models/bet.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -149,7 +150,7 @@ class _BetCardState extends State<BetCard> {
               if (isCreator)
                 ElevatedButton(
                   onPressed: () {
-                    // Action when the end button is pressed
+                    _terminateBet();
                   },
                   child: const Text('Termina'),
                 ),
@@ -185,6 +186,134 @@ class _BetCardState extends State<BetCard> {
       return Expanded(
         child: Container(),
       );
+    }
+  }
+
+  //conferma risposta termina bet
+  Widget _buildAnswerButton(String answer, VoidCallback onTap, bool isSelected) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.black.withOpacity(0.8),
+        backgroundColor: isSelected ? Colors.green : null,
+      ),
+      child: Text(answer),
+    );
+  }
+
+  void _terminateBet() async {
+    String? selectedAnswer;
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Seleziona risultato scommessa:'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Display options for selecting winning answer
+                  // Display answers in rows
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(width: 20),
+                      _buildAnswerButton(widget.bet.answer1, () {
+                        setState(() {
+                          selectedAnswer = widget.bet.answer1;
+                        });
+                      }, selectedAnswer == widget.bet.answer1),
+                      const SizedBox(width: 20),
+                      _buildAnswerButton(widget.bet.answer2, () {
+                        setState(() {
+                          selectedAnswer = widget.bet.answer2;
+                        });
+                      }, selectedAnswer == widget.bet.answer2),
+                      const SizedBox(width: 20),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(width: 20),
+                      _buildAnswerButton(widget.bet.answer3, () {
+                        setState(() {
+                          selectedAnswer = widget.bet.answer3;
+                        });
+                      }, selectedAnswer == widget.bet.answer3),
+                      const SizedBox(width: 20),
+                      _buildAnswerButton(widget.bet.answer4, () {
+                        setState(() {
+                          selectedAnswer = widget.bet.answer4;
+                        });
+                      }, selectedAnswer == widget.bet.answer4),
+                      const SizedBox(width: 20),
+                    ],
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Annulla'),
+                ),
+                if (selectedAnswer != null)
+                  TextButton(
+                    onPressed: () {
+                      // Output della risposta selezionata in debug
+                      debugPrint('Risposta vincente: $selectedAnswer');
+                      // Chiudi il dialog
+                      Navigator.of(context).pop();
+                      // Esegui il controllo delle risposte e l'aggiornamento del punteggio
+                      _checkAndUpdateScores(selectedAnswer!);
+                    },
+                    child: const Text('Conferma'),
+                  ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  //aumento punti sul db
+  void _checkAndUpdateScores(String selectedAnswer) async {
+    try {
+      String betId = widget.bet.id;
+
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .get();
+
+      for (var doc in querySnapshot.docs) {
+        String user = doc['utente'];
+        String answer = doc['risposta_scelta'];
+
+        // Controlla se la risposta dell'utente è corretta
+        if (answer == selectedAnswer) {
+          // Se la risposta è corretta, aumento di 10
+          await FirebaseFirestore.instance.collection('users').doc(user).update({
+            'score': FieldValue.increment(10),
+            'scommesse_vinte' : FieldValue.increment(1),
+          });
+        }
+        else {
+          await FirebaseFirestore.instance.collection('users').doc(user).update({
+            'scommesse_perse' : FieldValue.increment(1),
+          });
+        }
+      }
+
+      debugPrint('Punteggi aggiornati correttamente!');
+    } catch (e) {
+      debugPrint("Errore durante l'aggiornamento dei punteggi degli utenti: $e");
     }
   }
 }
