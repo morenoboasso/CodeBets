@@ -239,13 +239,16 @@ class _BetCardState extends State<BetCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const SizedBox(width: 20),
-                      _buildAnswerButton(widget.bet.answer3, () {
+                      if (widget.bet.answer3.isNotEmpty)
+                        _buildAnswerButton(widget.bet.answer3, () {
                         setState(() {
                           selectedAnswer = widget.bet.answer3;
                         });
                       }, selectedAnswer == widget.bet.answer3),
                       const SizedBox(width: 20),
-                      _buildAnswerButton(widget.bet.answer4, () {
+                      if (widget.bet.answer4.isNotEmpty)
+
+                        _buildAnswerButton(widget.bet.answer4, () {
                         setState(() {
                           selectedAnswer = widget.bet.answer4;
                         });
