@@ -12,7 +12,6 @@ class ActiveBetsPage extends StatefulWidget {
   _ActiveBetsPageState createState() => _ActiveBetsPageState();
 }
 
-
 class _ActiveBetsPageState extends State<ActiveBetsPage> {
   List<Bet> _betList = [];
   bool _isLoading = true;
@@ -34,7 +33,8 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
     // Retrieve user answers for active bets
     Map<String, String> userAnswers = {};
     for (var bet in betList) {
-      String? userAnswer = await dbService.getUserAnswerForBet(bet.id, storedUserName!);
+      String? userAnswer =
+          await dbService.getUserAnswerForBet(bet.id, storedUserName!);
       userAnswers[bet.id] = userAnswer!;
     }
 
@@ -67,57 +67,74 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       ),
       body: _isLoading
           ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Caricamento..."),
-            const SizedBox(height: 20),
-            CircularProgressIndicator(
-              backgroundColor: Colors.orangeAccent,
-              color: Colors.orange.withOpacity(0.7),
-            ),
-          ],
-        ),
-      )
-          : RefreshIndicator(
-        onRefresh: _refresh,
-        child: _betList.isEmpty
-            ? const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Nessuna scommessa al momento"),
-              SizedBox(height: 20),
-            ],
-          ),
-        )
-            : CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: BetCard(
-                          bet: _betList[index],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                childCount: _betList.length,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Caricamento..."),
+                  const SizedBox(height: 20),
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.orangeAccent,
+                    color: Colors.orange.withOpacity(0.7),
+                  ),
+                ],
               ),
+            )
+          : RefreshIndicator(
+              onRefresh: _refresh,
+              child: _betList.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Nessuna scommessa al momento"),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                            onTap:
+                                _refresh, // Chiamata alla funzione _refresh quando l'utente tocca l'icona
+                            child: const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.refresh_outlined,
+                                    size: 30,
+                                  ), // Icona refresh
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : CustomScrollView(
+                      slivers: [
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: BetCard(
+                                      bet: _betList[index],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            childCount: _betList.length,
+                          ),
+                        ),
+                      ],
+                    ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
-
