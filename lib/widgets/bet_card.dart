@@ -8,7 +8,7 @@ import '../services/db_service.dart';
 class BetCard extends StatefulWidget {
   final Bet bet;
 
-  const BetCard({Key? key, required this.bet}) : super(key: key);
+  const BetCard({super.key, required this.bet});
 
   @override
   _BetCardState createState() => _BetCardState();
@@ -18,6 +18,7 @@ class _BetCardState extends State<BetCard> {
   String? selectedAnswer;
   DbService dbService = DbService();
   bool isAnwerConfirmed = false;
+  bool hasUserVoted = false;
 
   @override
   void initState() {
@@ -31,13 +32,16 @@ class _BetCardState extends State<BetCard> {
     String? userAnswer = await dbService.getUserAnswerForBet(betId, userName!);
     setState(() {
       selectedAnswer = userAnswer;
+      isAnwerConfirmed = true;
     });
   }
 
   void selectAnswer(String answer) {
-    setState(() {
-      selectedAnswer = answer;
-    });
+    if (!isAnwerConfirmed) {
+      setState(() {
+        selectedAnswer = answer;
+      });
+    }
   }
 
   void confirmSelection() async {
@@ -131,8 +135,9 @@ class _BetCardState extends State<BetCard> {
                       });
                       confirmSelection();
                     },
-                    child: isAnwerConfirmed ? const Icon(Icons.check, color: Colors.black) : const Text('Conferma'),
-                  ),
+                    child:
+                       isAnwerConfirmed ? const Icon(Icons.check, color: Colors.black) : const Text('Conferma'),
+                    ),
               const SizedBox(height: 20),
               // Creator and date
               Row(
@@ -313,6 +318,7 @@ class _BetCardState extends State<BetCard> {
           });
         }
       }
+      await FirebaseFirestore.instance.collection('scommesse').doc(betId).delete();
 
       debugPrint('Punteggi aggiornati correttamente!');
     } catch (e) {
