@@ -91,16 +91,15 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
                             height: 10,
                           ),
                           GestureDetector(
-                            onTap:
-                                _refresh, // Chiamata alla funzione _refresh quando l'utente tocca l'icona
+                            onTap: _refresh,
                             child: const Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
                                     Icons.refresh_outlined,
-                                    size: 30,
-                                  ), // Icona refresh
+                                    size: 40,
+                                  ),
                                 ],
                               ),
                             ),

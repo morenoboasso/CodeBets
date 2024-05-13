@@ -16,6 +16,7 @@ class BetCard extends StatefulWidget {
 class _BetCardState extends State<BetCard> {
   String? selectedAnswer;
   DbService dbService = DbService();
+  bool isAnwerConfirmed = false;
 
   @override
   void initState() {
@@ -121,12 +122,16 @@ class _BetCardState extends State<BetCard> {
                   ),
                 ],
               ),
-            // Confirm button
-              if (selectedAnswer != null && selectedAnswer!.isNotEmpty)
-                ElevatedButton(
-                  onPressed: confirmSelection,
-                  child: const Text('Conferma'),
-                ),
+              // Confirm button
+              if (selectedAnswer != null && selectedAnswer!.isNotEmpty)ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isAnwerConfirmed = true;
+                      });
+                      confirmSelection();
+                    },
+                    child: isAnwerConfirmed ? const Icon(Icons.check, color: Colors.black) : const Text('Conferma'),
+                  ),
               const SizedBox(height: 20),
               // Creator and date
               Row(
