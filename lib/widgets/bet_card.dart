@@ -18,7 +18,6 @@ class _BetCardState extends State<BetCard> {
   String? selectedAnswer;
   DbService dbService = DbService();
   bool isAnwerConfirmed = false;
-  bool hasUserVoted = false;
 
   @override
   void initState() {
@@ -32,16 +31,13 @@ class _BetCardState extends State<BetCard> {
     String? userAnswer = await dbService.getUserAnswerForBet(betId, userName!);
     setState(() {
       selectedAnswer = userAnswer;
-      isAnwerConfirmed = true;
     });
   }
 
   void selectAnswer(String answer) {
-    if (!isAnwerConfirmed) {
-      setState(() {
-        selectedAnswer = answer;
-      });
-    }
+    setState(() {
+      selectedAnswer = answer;
+    });
   }
 
   void confirmSelection() async {
@@ -135,9 +131,8 @@ class _BetCardState extends State<BetCard> {
                       });
                       confirmSelection();
                     },
-                    child:
-                       isAnwerConfirmed ? const Icon(Icons.check, color: Colors.black) : const Text('Conferma'),
-                    ),
+                    child: isAnwerConfirmed ? const Icon(Icons.check, color: Colors.black) : const Text('Conferma'),
+                  ),
               const SizedBox(height: 20),
               // Creator and date
               Row(
