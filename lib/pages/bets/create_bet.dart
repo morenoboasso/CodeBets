@@ -147,7 +147,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     _answer3 = newValue ?? '';
                   },
                   maxLength: 20,
-
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -159,7 +158,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     _answer4 = newValue ?? '';
                   },
                   maxLength: 20,
-
                 ),
                 Center(
                   child: ElevatedButton(
