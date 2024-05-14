@@ -168,8 +168,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           } else if (index == sortedUsers.length - 1) {
             leadingIcon = const Text('💩',style: TextStyle(fontSize: 20),); // Ultimo utente
           } else {
-            leadingIcon = Text(' ${index +
-                1}°',style: const TextStyle(fontSize: 20),); // Altri utenti con il loro numero di classifica
+            leadingIcon = Text(' ${index + 1}°',style: const TextStyle(fontSize: 20),); // Altri utenti con il loro numero di classifica
           }
           return GestureDetector(
             onTap: () {
