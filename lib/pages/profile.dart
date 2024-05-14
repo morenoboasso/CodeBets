@@ -13,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final DbService _dbService = DbService();
   final GetStorage _storage = GetStorage();
+  int _userTargetBets = 0;
 
   Map<String, dynamic> _userData = {};
 
@@ -20,7 +21,22 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _fetchUserData();
+    _fetchUserTargetBets();
   }
+
+  //metodo per recuperare il numero di scommesse come target
+  Future<void> _fetchUserTargetBets() async {
+    final userName = _storage.read('userName');
+    if (userName != null) {
+      final betsList = await _dbService.getBetsList();
+      // Conta quante scommesse hanno l'utente come target
+      int targetBetsCount = betsList.where((bet) => bet.target == userName).length;
+      setState(() {
+        _userTargetBets = targetBetsCount;
+      });
+    }
+  }
+
 
   Future<void> _fetchUserData() async {
     final userName = _storage.read('userName');
@@ -39,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (userName != null) {
       await _dbService.resetUserData(userName);
       await _fetchUserData();
+      await _fetchUserTargetBets();
     }
   }
 
@@ -94,6 +111,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '⚠️ Sei il target di:  $_userTargetBets scommesse',
+              style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
           ],
