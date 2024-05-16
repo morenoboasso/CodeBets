@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codebets/models/bet.dart';
 import 'package:flutter/cupertino.dart';
+import '../models/bet.dart';
 
 class DbService {
   //controllo login
@@ -18,7 +19,7 @@ class DbService {
     }
   }
 
-//lista utenti
+  //lista utenti
   Future<List<String>> getUsersList() async {
     try {
       QuerySnapshot usersSnapshot =
@@ -30,7 +31,6 @@ class DbService {
       return [];
     }
   }
-
 
   //ricuperare tutte le scommesse
   Future<List<Bet>> getBetsList() async {
@@ -47,7 +47,7 @@ class DbService {
     }
   }
 
-//prende i dati degli utenti
+  //prende i dati degli utenti
   Future<Map<String, dynamic>> getUsersData() async {
     try {
       QuerySnapshot usersSnapshot =
@@ -72,7 +72,7 @@ class DbService {
     }
   }
 
-//resetta tutti i dati di un uteente
+  //resetta tutti i dati di un utente
   Future<void> resetUserData(String userName) async {
     try {
       // Ottieni il riferimento al documento dell'utente nel database
@@ -91,6 +91,7 @@ class DbService {
     }
   }
 
+  // Aggiorna la risposta dell'utente per una scommessa
   Future<void> updateAnswer(String betId, String userName, String answer) async {
     try {
       // Ottieni il riferimento al documento della risposta nel database
@@ -117,6 +118,7 @@ class DbService {
     }
   }
 
+  // Recupera la risposta dell'utente per una scommessa
   Future<String?> getUserAnswerForBet(String betId, String userName) async {
     try {
       // Ottieni il riferimento al documento della risposta nel database
@@ -137,4 +139,12 @@ class DbService {
     }
   }
 
+  // Stream delle scommesse per ricevere aggiornamenti in tempo reale
+  Stream<List<Bet>> get betsStream {
+    return FirebaseFirestore.instance.collection('scommesse').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Bet.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+  }
 }

@@ -6,7 +6,7 @@ import '../../widgets/bet_card.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ActiveBetsPage extends StatefulWidget {
-  const ActiveBetsPage({super.key});
+  const ActiveBetsPage({Key? key}) : super(key: key);
 
   @override
   _ActiveBetsPageState createState() => _ActiveBetsPageState();
@@ -15,6 +15,7 @@ class ActiveBetsPage extends StatefulWidget {
 class _ActiveBetsPageState extends State<ActiveBetsPage> {
   List<Bet> _betList = [];
   bool _isLoading = true;
+  late Stream<List<Bet>> _betsStream;
 
   // Load bets from the database
   Future<void> _loadBets() async {
@@ -34,7 +35,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
     Map<String, String> userAnswers = {};
     for (var bet in betList) {
       String? userAnswer =
-          await dbService.getUserAnswerForBet(bet.id, storedUserName!);
+      await dbService.getUserAnswerForBet(bet.id, storedUserName!);
       userAnswers[bet.id] = userAnswer!;
     }
 
@@ -57,6 +58,13 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
   void initState() {
     super.initState();
     _loadBets();
+    DbService dbService = DbService();
+    _betsStream = dbService.betsStream;
+    _betsStream.listen((List<Bet> updatedBets) {
+      setState(() {
+        _betList = updatedBets;
+      });
+    });
   }
 
   @override
@@ -67,73 +75,73 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       ),
       body: _isLoading
           ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Caricamento..."),
-                  const SizedBox(height: 20),
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.orangeAccent,
-                    color: Colors.orange.withOpacity(0.7),
-                  ),
-                ],
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: _refresh,
-              child: _betList.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Nessuna scommessa al momento"),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: _refresh,
-                            child: const Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.refresh_outlined,
-                                    size: 40,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  : CustomScrollView(
-                      slivers: [
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: BetCard(
-                                      bet: _betList[index],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            childCount: _betList.length,
-                          ),
-                        ),
-                      ],
-                    ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Caricamento..."),
+            const SizedBox(height: 20),
+            CircularProgressIndicator(
+              backgroundColor: Colors.orangeAccent,
+              color: Colors.orange.withOpacity(0.7),
             ),
+          ],
+        ),
+      )
+          : RefreshIndicator(
+        onRefresh: _refresh,
+        child: _betList.isEmpty
+            ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Nessuna scommessa al momento"),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: _refresh,
+                child: const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.refresh_outlined,
+                        size: 40,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+            : CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Padding(
+                    padding:
+                    const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: BetCard(
+                          bet: _betList[index],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                childCount: _betList.length,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
