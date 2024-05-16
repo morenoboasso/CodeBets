@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -17,11 +18,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Map<String, dynamic> _userData = {};
 
+  StreamSubscription<Map<String, dynamic>>? _userDataSubscription;
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
     _fetchUserTargetBets();
+    _fetchUserData();
+    _userDataSubscription = _dbService.getUserDataStream().listen((userData) {
+      setState(() {
+        _userData = userData;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _userDataSubscription?.cancel();
+    super.dispose();
   }
 
   //metodo per recuperare il numero di scommesse come target

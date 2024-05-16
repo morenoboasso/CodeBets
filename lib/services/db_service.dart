@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_storage/get_storage.dart';
 import '../models/bet.dart';
 
 class DbService {
+  final GetStorage _storage = GetStorage();
   //controllo login
   Future<bool> checkUserNameExists(String userName) async {
     try {
@@ -146,5 +148,14 @@ class DbService {
         return Bet.fromMap(doc.id, doc.data());
       }).toList();
     });
+  }
+
+  Stream<Map<String, dynamic>> getUserDataStream() {
+    final userName = _storage.read('userName');
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userName)
+        .snapshots()
+        .map((snapshot) => snapshot.data() ?? {});
   }
 }

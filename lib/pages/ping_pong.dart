@@ -27,8 +27,8 @@ class _PingPongPageState extends State<PingPongPage> {
               color: Colors.red,
               child: Center(
                 child: Text(
-                  'Squadra 1: $redScore',
-                  style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                  '$redScore',
+                  style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 60),
                 ),
               ),
             ),
@@ -47,8 +47,8 @@ class _PingPongPageState extends State<PingPongPage> {
               child: Center(
                 child:
                    Text(
-                  'Squadra 2: $blueScore',
-                  style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                  '$blueScore',
+                  style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 60),
                 ),
 
               ),
