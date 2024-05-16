@@ -214,6 +214,7 @@ class _BetCardState extends State<BetCard> {
               child: Center(
                 child: Text(
                   answer,
+                  textAlign: TextAlign.center,
                   style: selectedAnswer == answer
                       ? const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
                       : TextStyle(color: Colors.black.withOpacity(0.8)),
@@ -230,20 +231,34 @@ class _BetCardState extends State<BetCard> {
     }
   }
 
-  //conferma risposta termina bet
-  Widget _buildAnswerButton(String answer, VoidCallback onTap,
-      bool isSelected) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black.withOpacity(0.8),
-        backgroundColor: isSelected ? Colors.green : null,
+  Widget _buildAnswerButton(String answer, VoidCallback onTap, bool isSelected) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.lightGreen.withOpacity(1) : Colors.lightGreen.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Text(
+              answer,
+              textAlign: TextAlign.center,
+              style: isSelected
+                  ? const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)
+                  : TextStyle(color: Colors.black.withOpacity(0.8),fontSize: 14),
+            ),
+          ),
+        ),
       ),
-      child: Text(answer),
     );
   }
 
- // termina la scommessa
+
+
+
+  // termina la scommessa
   void _terminateBet() async {
     String? selectedAnswer;
 
@@ -287,9 +302,8 @@ class _BetCardState extends State<BetCard> {
                             selectedAnswer = widget.bet.answer3;
                           });
                         }, selectedAnswer == widget.bet.answer3),
-                      const SizedBox(width: 20),
-                      if (widget.bet.answer4.isNotEmpty)
 
+                      if (widget.bet.answer4.isNotEmpty)
                         _buildAnswerButton(widget.bet.answer4, () {
                           setState(() {
                             selectedAnswer = widget.bet.answer4;
