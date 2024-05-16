@@ -74,7 +74,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
                 ),
                 DropdownButtonFormField<String>(
                   value: _selectedUser,
-                  items: _usersList.map((String user) {
+                  items: _usersList
+                      .where((user) => user != 'admin')
+                      .map((String user) {
                     return DropdownMenuItem<String>(
                       value: user,
                       child: Text(user),
@@ -87,9 +89,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
                   },
                   decoration: const InputDecoration(
                     labelText: 'Target (se presente)',
-                    hintText: "Per ping pong lasciare vuoto",
                   ),
                 ),
+
                 const SizedBox(height: 16),
                 TextFormField(
                   decoration: const InputDecoration(
