@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codebets/models/bet.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-
 import '../services/db_service.dart';
 
 class BetCard extends StatefulWidget {
@@ -23,8 +22,18 @@ class _BetCardState extends State<BetCard> {
   void initState() {
     super.initState();
     _loadUserAnswer();
+    _checkAnswerConfirmation();
   }
-
+//controlla se lìutente ha gia selezionato una risposta
+  Future<void> _checkAnswerConfirmation() async {
+    String? userName = GetStorage().read<String>('userName');
+    String betId = widget.bet.id;
+    String? userAnswer = await dbService.getUserAnswerForBet(betId, userName!);
+    setState(() {
+      isAnwerConfirmed = userAnswer != null && userAnswer.isNotEmpty;
+    });
+  }
+// carica le risposte date
   Future<void> _loadUserAnswer() async {
     String? userName = GetStorage().read<String>('userName');
     String betId = widget.bet.id;
@@ -34,12 +43,14 @@ class _BetCardState extends State<BetCard> {
     });
   }
 
+  //selezione risposta
   void selectAnswer(String answer) {
     setState(() {
       selectedAnswer = answer;
     });
   }
 
+  //conferma selezione
   void confirmSelection() async {
     if (selectedAnswer != null) {
       String? userName = GetStorage().read<String>('userName');
@@ -127,18 +138,19 @@ class _BetCardState extends State<BetCard> {
                 ),
               ],
             ),
+
             // Confirm button
-            if (selectedAnswer != null &&
-                selectedAnswer!.isNotEmpty)ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  isAnwerConfirmed = true;
-                });
-                confirmSelection();
-              },
-              child: isAnwerConfirmed ? const Icon(
-                  Icons.check, color: Colors.black) : const Text('Conferma'),
-            ),
+            if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) && !isAnwerConfirmed)
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    isAnwerConfirmed = true;
+                  });
+                  confirmSelection();
+                },
+                child: const Text('Conferma'),
+              ),
+
             const SizedBox(height: 20),
             // Creator and date
             Row(
@@ -152,7 +164,7 @@ class _BetCardState extends State<BetCard> {
               ],
             ),
             const SizedBox(height: 5),
-            // End bet button
+            // termina bet button
             if (isCreator)
               ElevatedButton(
                 onPressed: () {
@@ -168,14 +180,14 @@ class _BetCardState extends State<BetCard> {
 
   Widget _buildAnswerContainer(String answer, Color color) {
     if (answer.isNotEmpty) {
-      return Expanded(
-        child: GestureDetector(
-          onTap: () => selectAnswer(answer),
+      // Verifica se l'utente ha già fornito una risposta per questa scommessa
+      if (isAnwerConfirmed) {
+        // Se sì, rendi il container non cliccabile solo se questa è la risposta selezionata
+        return Expanded(
           child: Container(
             height: 40,
             decoration: BoxDecoration(
-              color: selectedAnswer == answer ? color.withOpacity(1) : color
-                  .withOpacity(0.4),
+              color: selectedAnswer == answer ? color.withOpacity(1) : color.withOpacity(0.4),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -187,8 +199,30 @@ class _BetCardState extends State<BetCard> {
               ),
             ),
           ),
-        ),
-      );
+        );
+      } else {
+        // Altrimenti, rendi il container cliccabile
+        return Expanded(
+          child: GestureDetector(
+            onTap: () => selectAnswer(answer),
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: selectedAnswer == answer ? color.withOpacity(1) : color.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  answer,
+                  style: selectedAnswer == answer
+                      ? const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
+                      : TextStyle(color: Colors.black.withOpacity(0.8)),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
     } else {
       return Expanded(
         child: Container(),
@@ -209,6 +243,7 @@ class _BetCardState extends State<BetCard> {
     );
   }
 
+ // termina la scommessa
   void _terminateBet() async {
     String? selectedAnswer;
 
@@ -223,7 +258,6 @@ class _BetCardState extends State<BetCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Display options for selecting winning answer
-                  // Display answers in rows
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -354,6 +388,4 @@ class _BetCardState extends State<BetCard> {
       debugPrint("Errore durante l'aggiornamento dei punteggi degli utenti o la cancellazione delle risposte: $e");
     }
   }
-
-
 }
