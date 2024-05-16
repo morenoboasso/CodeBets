@@ -307,6 +307,13 @@ class _BetCardState extends State<BetCard> {
       for (var doc in querySnapshot.docs) {
         String user = doc['utente'];
         String answer = doc['risposta_scelta'];
+        String target = widget.bet.target;
+
+        if (user == target) {
+          await FirebaseFirestore.instance.collection('users').doc(user).update({
+            'score': FieldValue.increment(2),
+          });
+        }
 
         // Verifica se l'utente ha selezionato una risposta
         if (answer.isNotEmpty) {
@@ -314,9 +321,11 @@ class _BetCardState extends State<BetCard> {
           if (answer == selectedAnswer) {
             // Se la risposta è corretta, aumenta il punteggio e il numero di scommesse vinte
             await FirebaseFirestore.instance.collection('users').doc(user).update({
-              'score': FieldValue.increment(10),
+              'score': FieldValue.increment(5), // Aumenta punteggio per chi vince
               'scommesse_vinte': FieldValue.increment(1),
             });
+
+            // Se l'utente è il target, aggiungi anche punti bonus
           } else {
             // Se la risposta è sbagliata, incrementa solo il numero di scommesse perse
             await FirebaseFirestore.instance.collection('users').doc(user).update({
@@ -345,5 +354,6 @@ class _BetCardState extends State<BetCard> {
       debugPrint("Errore durante l'aggiornamento dei punteggi degli utenti o la cancellazione delle risposte: $e");
     }
   }
+
 
 }

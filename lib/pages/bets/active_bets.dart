@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../models/bet.dart';
 import '../../services/db_service.dart';
 import '../../widgets/bet_card.dart';
@@ -15,56 +14,40 @@ class ActiveBetsPage extends StatefulWidget {
 class _ActiveBetsPageState extends State<ActiveBetsPage> {
   List<Bet> _betList = [];
   bool _isLoading = true;
-  late Stream<List<Bet>> _betsStream;
-
-  // Load bets from the database
-  Future<void> _loadBets() async {
-    DbService dbService = DbService();
-    List<Bet> betList = await dbService.getBetsList();
-
-    // Get the user stored in the storage
-    String? storedUserName = GetStorage().read<String>('userName');
-
-    // Filter bets based on the user's target
-    // if I am the target I will not see that bet
-    if (storedUserName != null) {
-      betList = betList.where((bet) => bet.target != storedUserName).toList();
-    }
-
-    // Retrieve user answers for active bets
-    Map<String, String> userAnswers = {};
-    for (var bet in betList) {
-      String? userAnswer =
-      await dbService.getUserAnswerForBet(bet.id, storedUserName!);
-      userAnswers[bet.id] = userAnswer!;
-    }
-
-    // Set loading completion state
-    setState(() {
-      _betList = betList;
-      _isLoading = false;
-    });
-  }
-
-  // Reload bets
-  Future<void> _refresh() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await _loadBets();
-  }
+  late Stream<List<Bet>> _betsStream; // Aggiunta dello stream
 
   @override
   void initState() {
     super.initState();
-    _loadBets();
-    DbService dbService = DbService();
-    _betsStream = dbService.betsStream;
-    _betsStream.listen((List<Bet> updatedBets) {
+    _betsStream = DbService().betsStream; // Inizializzazione dello stream
+    _loadBets(); // Caricamento iniziale delle scommesse
+  }
+
+  // Load bets from the database and apply user filter
+  Future<void> _loadBets() async {
+    String? storedUserName = GetStorage().read<String>('userName');
+    await for (List<Bet> snapshot in _betsStream) { // Ascolta gli aggiornamenti dello stream
       setState(() {
-        _betList = updatedBets;
+        _isLoading = true; // Mostra lo spinner di caricamento
       });
+      // Aggiorna la lista locale delle scommesse con quella ottenuta dallo stream
+      _betList = snapshot;
+      // Applica il filtro in base all'utente memorizzato
+      if (storedUserName != null) {
+        _betList = _betList.where((bet) => bet.target != storedUserName).toList();
+      }
+      setState(() {
+        _isLoading = false; // Nasconde lo spinner di caricamento
+      });
+    }
+  }
+
+  // Restituisci un indicatore di aggiornamento quando si scorre verso il basso
+  Future<void> _refresh() async {
+    setState(() {
+      _isLoading = true; // Mostra lo spinner di caricamento
     });
+    await _loadBets(); // Ricarica le scommesse
   }
 
   @override
