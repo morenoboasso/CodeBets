@@ -16,7 +16,6 @@ class BottomNavigationBarWidget extends StatefulWidget {
 
 class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   int _selectedIndex = 0;
-  bool _createBetRequested = false; // Flag per indicare se è stata richiesta la creazione di una nuova scommessa
 
   static final List<Widget> _widgetOptions = <Widget>[
     const ActiveBetsPage(),
@@ -27,15 +26,6 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   ];
 
   void _onItemTapped(int index) {
-    // Se l'utente ha richiesto di creare una nuova scommessa, andiamo alla tab delle scommesse attive
-    if (_createBetRequested) {
-      _createBetRequested = false; // Resettiamo il flag
-      setState(() {
-        _selectedIndex = 1; // Vai alla tab delle scommesse attive
-      });
-      return;
-    }
-
     setState(() {
       _selectedIndex = index;
     });
