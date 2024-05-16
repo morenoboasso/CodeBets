@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             if (_userTargetBets > 0)
               const FractionallySizedBox(
-              widthFactor: 0.5,
+              widthFactor: 0.7,
               child: SizedBox(
                 width: 50,
                 child: Divider(),

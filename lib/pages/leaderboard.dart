@@ -133,12 +133,12 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         break;
       case OrderBy.mostWonBets:
         setState(() {
-          _appBarTitle = 'Classifica del più ricco';
+          _appBarTitle = 'Classifica del Vincente';
         });
         break;
       case OrderBy.mostLostBets:
         setState(() {
-          _appBarTitle = 'Classifica del più povero';
+          _appBarTitle = 'Classifica del Perdente';
         });
         break;
     }
