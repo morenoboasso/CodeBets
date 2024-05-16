@@ -5,7 +5,7 @@ import '../../widgets/bet_card.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ActiveBetsPage extends StatefulWidget {
-  const ActiveBetsPage({Key? key}) : super(key: key);
+  const ActiveBetsPage({super.key});
 
   @override
   _ActiveBetsPageState createState() => _ActiveBetsPageState();
@@ -42,12 +42,19 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
     }
   }
 
-  // Restituisci un indicatore di aggiornamento quando si scorre verso il basso
-  Future<void> _refresh() async {
-    setState(() {
-      _isLoading = true; // Mostra lo spinner di caricamento
-    });
-    await _loadBets(); // Ricarica le scommesse
+  // Widget per mostrare un messaggio quando non ci sono scommesse
+  Widget _noBets() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Nessuna scommessa al momento"),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -70,35 +77,9 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
           ],
         ),
       )
-          : RefreshIndicator(
-        onRefresh: _refresh,
-        child: _betList.isEmpty
-            ? Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Nessuna scommessa al momento"),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: _refresh,
-                child: const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.refresh_outlined,
-                        size: 40,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        )
-            : CustomScrollView(
+          : _betList.isEmpty
+          ? _noBets() // Mostra il messaggio quando non ci sono scommesse
+          : CustomScrollView(
           slivers: [
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -124,7 +105,6 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
             ),
           ],
         ),
-      ),
     );
   }
 }

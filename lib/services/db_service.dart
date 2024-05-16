@@ -143,7 +143,7 @@ class DbService {
   Stream<List<Bet>> get betsStream {
     return FirebaseFirestore.instance.collection('scommesse').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
-        return Bet.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+        return Bet.fromMap(doc.id, doc.data());
       }).toList();
     });
   }
