@@ -291,5 +291,20 @@ class _CreateBetPageState extends State<CreateBetPage> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     debugPrint('Dati inviati al database Firebase con successo!');
+    _resetForm();
+
+  }
+  void _resetForm() {
+    setState(() {
+      _formKey.currentState?.reset();
+      _title = '';
+      _selectedUser = null;
+      _description = '';
+      _answer1 = '';
+      _answer2 = '';
+      _answer3 = '';
+      _answer4 = '';
+    });
+    FocusScope.of(context).unfocus();
   }
 }

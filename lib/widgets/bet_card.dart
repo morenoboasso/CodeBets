@@ -63,101 +63,107 @@ class _BetCardState extends State<BetCard> {
     bool isCreator = widget.bet.creator == storedUserName;
 
     return
-        Card(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 10),
+      Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 10),
+            Text(
+              widget.bet.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Description
+            if (widget.bet.description.isNotEmpty)
               Text(
-                widget.bet.title,
+                widget.bet.description,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.w300),
               ),
-              const SizedBox(height: 10),
-              // Description
-              if (widget.bet.description.isNotEmpty)
-                Text(
-                  widget.bet.description,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.w300),
-                ),
-              const SizedBox(height: 10),
+            const SizedBox(height: 10),
 
-              // Target
-              if (widget.bet.target.isNotEmpty)
+            // Target
+            if (widget.bet.target.isNotEmpty)
+              Text(
+                'Target: ${widget.bet.target}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            const SizedBox(height: 15),
+            // Answers
+            Column(
+              children: [
+                const Text('Scegli una risposta:'),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const SizedBox(width: 20),
+                    _buildAnswerContainer(
+                        widget.bet.answer1, Colors.orangeAccent),
+                    const SizedBox(width: 20),
+                    _buildAnswerContainer(
+                        widget.bet.answer2, Colors.orangeAccent),
+                    const SizedBox(width: 20),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const SizedBox(width: 20),
+                    _buildAnswerContainer(
+                        widget.bet.answer3, Colors.orangeAccent),
+                    const SizedBox(width: 20),
+                    _buildAnswerContainer(
+                        widget.bet.answer4, Colors.orangeAccent),
+                    const SizedBox(width: 20),
+                  ],
+                ),
+              ],
+            ),
+            // Confirm button
+            if (selectedAnswer != null &&
+                selectedAnswer!.isNotEmpty)ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isAnwerConfirmed = true;
+                });
+                confirmSelection();
+              },
+              child: isAnwerConfirmed ? const Icon(
+                  Icons.check, color: Colors.black) : const Text('Conferma'),
+            ),
+            const SizedBox(height: 20),
+            // Creator and date
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
                 Text(
-                  'Target: ${widget.bet.target}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  'Creatore: ${widget.bet.creator}',
                 ),
-              const SizedBox(height: 15),
-              // Answers
-              Column(
-                children: [
-                  const Text('Scegli una risposta:'),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const SizedBox(width: 20),
-                      _buildAnswerContainer(widget.bet.answer1, Colors.orangeAccent),
-                      const SizedBox(width: 20),
-                      _buildAnswerContainer(widget.bet.answer2, Colors.orangeAccent),
-                      const SizedBox(width: 20),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const SizedBox(width: 20),
-                      _buildAnswerContainer(widget.bet.answer3, Colors.orangeAccent),
-                      const SizedBox(width: 20),
-                      _buildAnswerContainer(widget.bet.answer4, Colors.orangeAccent),
-                      const SizedBox(width: 20),
-                    ],
-                  ),
-                ],
+                Text(widget.bet.creationDate),
+                // Button for creator
+              ],
+            ),
+            const SizedBox(height: 5),
+            // End bet button
+            if (isCreator)
+              ElevatedButton(
+                onPressed: () {
+                  _terminateBet();
+                },
+                child: const Text('Termina'),
               ),
-              // Confirm button
-              if (selectedAnswer != null && selectedAnswer!.isNotEmpty)ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isAnwerConfirmed = true;
-                      });
-                      confirmSelection();
-                    },
-                    child: isAnwerConfirmed ? const Icon(Icons.check, color: Colors.black) : const Text('Conferma'),
-                  ),
-              const SizedBox(height: 20),
-              // Creator and date
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Creatore: ${widget.bet.creator}',
-                  ),
-                  Text(widget.bet.creationDate),
-                  // Button for creator
-                ],
-              ),
-              const SizedBox(height: 5),
-              // End bet button
-              if (isCreator)
-                ElevatedButton(
-                  onPressed: () {
-                    _terminateBet();
-                  },
-                  child: const Text('Termina'),
-                ),
-              const SizedBox(height: 10),
-            ],
-          ),
-    );
+            const SizedBox(height: 10),
+          ],
+        ),
+      );
   }
 
   Widget _buildAnswerContainer(String answer, Color color) {
@@ -168,7 +174,8 @@ class _BetCardState extends State<BetCard> {
           child: Container(
             height: 40,
             decoration: BoxDecoration(
-              color: selectedAnswer == answer ? color.withOpacity(1) : color.withOpacity(0.4),
+              color: selectedAnswer == answer ? color.withOpacity(1) : color
+                  .withOpacity(0.4),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -190,7 +197,8 @@ class _BetCardState extends State<BetCard> {
   }
 
   //conferma risposta termina bet
-  Widget _buildAnswerButton(String answer, VoidCallback onTap, bool isSelected) {
+  Widget _buildAnswerButton(String answer, VoidCallback onTap,
+      bool isSelected) {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
@@ -241,18 +249,18 @@ class _BetCardState extends State<BetCard> {
                       const SizedBox(width: 20),
                       if (widget.bet.answer3.isNotEmpty)
                         _buildAnswerButton(widget.bet.answer3, () {
-                        setState(() {
-                          selectedAnswer = widget.bet.answer3;
-                        });
-                      }, selectedAnswer == widget.bet.answer3),
+                          setState(() {
+                            selectedAnswer = widget.bet.answer3;
+                          });
+                        }, selectedAnswer == widget.bet.answer3),
                       const SizedBox(width: 20),
                       if (widget.bet.answer4.isNotEmpty)
 
                         _buildAnswerButton(widget.bet.answer4, () {
-                        setState(() {
-                          selectedAnswer = widget.bet.answer4;
-                        });
-                      }, selectedAnswer == widget.bet.answer4),
+                          setState(() {
+                            selectedAnswer = widget.bet.answer4;
+                          });
+                        }, selectedAnswer == widget.bet.answer4),
                       const SizedBox(width: 20),
                     ],
                   ),
@@ -290,6 +298,7 @@ class _BetCardState extends State<BetCard> {
     try {
       String betId = widget.bet.id;
 
+      // Ottieni e aggiorna i punteggi degli utenti
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('risposte')
           .where('scommessa_id', isEqualTo: betId)
@@ -299,25 +308,42 @@ class _BetCardState extends State<BetCard> {
         String user = doc['utente'];
         String answer = doc['risposta_scelta'];
 
-        // Controlla se la risposta dell'utente è corretta
-        if (answer == selectedAnswer) {
-          // Se la risposta è corretta, aumento di 10
-          await FirebaseFirestore.instance.collection('users').doc(user).update({
-            'score': FieldValue.increment(10),
-            'scommesse_vinte' : FieldValue.increment(1),
-          });
-        }
-        else {
-          await FirebaseFirestore.instance.collection('users').doc(user).update({
-            'scommesse_perse' : FieldValue.increment(1),
-          });
+        // Verifica se l'utente ha selezionato una risposta
+        if (answer.isNotEmpty) {
+          // Controlla se la risposta dell'utente è corretta
+          if (answer == selectedAnswer) {
+            // Se la risposta è corretta, aumenta il punteggio e il numero di scommesse vinte
+            await FirebaseFirestore.instance.collection('users').doc(user).update({
+              'score': FieldValue.increment(10),
+              'scommesse_vinte': FieldValue.increment(1),
+            });
+          } else {
+            // Se la risposta è sbagliata, incrementa solo il numero di scommesse perse
+            await FirebaseFirestore.instance.collection('users').doc(user).update({
+              'scommesse_perse': FieldValue.increment(1),
+            });
+          }
         }
       }
+
+      // Cancella le risposte associate alla scommessa
+      await FirebaseFirestore.instance
+          .collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .get()
+          .then((querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+
+      // Cancella la scommessa stessa
       await FirebaseFirestore.instance.collection('scommesse').doc(betId).delete();
 
-      debugPrint('Punteggi aggiornati correttamente!');
+      debugPrint('Punteggi aggiornati e risposte cancellate correttamente!');
     } catch (e) {
-      debugPrint("Errore durante l'aggiornamento dei punteggi degli utenti: $e");
+      debugPrint("Errore durante l'aggiornamento dei punteggi degli utenti o la cancellazione delle risposte: $e");
     }
   }
+
 }

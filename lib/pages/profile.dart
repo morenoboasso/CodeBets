@@ -30,13 +30,13 @@ class _ProfilePageState extends State<ProfilePage> {
     if (userName != null) {
       final betsList = await _dbService.getBetsList();
       // Conta quante scommesse hanno l'utente come target
-      int targetBetsCount = betsList.where((bet) => bet.target == userName).length;
+      int targetBetsCount =
+          betsList.where((bet) => bet.target == userName).length;
       setState(() {
         _userTargetBets = targetBetsCount;
       });
     }
   }
-
 
   Future<void> _fetchUserData() async {
     final userName = _storage.read('userName');
@@ -84,7 +84,8 @@ class _ProfilePageState extends State<ProfilePage> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.transparent,
-                backgroundImage: NetworkImage(_userData['pfp'] ?? 'https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369'),
+                backgroundImage: NetworkImage(_userData['pfp'] ??
+                    'https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369'),
               ),
             ),
             const SizedBox(height: 20),
@@ -113,22 +114,52 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             const SizedBox(height: 20),
-            Text(
-              '⚠️ Sei il target di:  $_userTargetBets scommesse',
-              style: const TextStyle(fontSize: 16),
+
+
+            if (_userTargetBets > 0)
+              const FractionallySizedBox(
+                widthFactor: 0.5,
+                child: SizedBox(
+                  width: 50,
+                  child: Divider(),
+                ),
+              ),
+            if (_userTargetBets > 0)
+              Column(
+              children: [
+                const Text(
+                  '🚨 Attenzione 🚨',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'Sei il target di $_userTargetBets ${_userTargetBets == 1 ? 'scommessa' : 'scommesse'}.',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
             ),
+            if (_userTargetBets > 0)
+              const FractionallySizedBox(
+              widthFactor: 0.5,
+              child: SizedBox(
+                width: 50,
+                child: Divider(),
+              ),
+            ),
+
+
             const SizedBox(height: 20),
           ],
         ),
       ),
       floatingActionButton: kDebugMode
           ? FloatingActionButton(
-        onPressed: () async {
-          await _resetUserData();
-        },
-        tooltip: "Cancella score e scommesse create",
-        child: const Icon(Icons.delete_sweep_outlined),
-      )
+              onPressed: () async {
+                await _resetUserData();
+              },
+              tooltip: "Cancella score e scommesse create",
+              child: const Icon(Icons.delete_sweep_outlined),
+            )
           : null,
     );
   }
