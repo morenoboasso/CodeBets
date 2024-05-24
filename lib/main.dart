@@ -75,6 +75,11 @@ class LoginPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
+                // Capitalizza la prima lettera del nome utente
+                if (userName.isNotEmpty) {
+                  userName = userName[0].toUpperCase() + userName.substring(1);
+                }
+
                 // Controlla se il nome utente esiste nel database
                 bool nameExists = await dbService.checkUserNameExists(userName);
                 if (nameExists) {
