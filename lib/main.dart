@@ -46,8 +46,37 @@ class MyApp extends StatelessWidget {
 }
 
 //login
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +95,20 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image(
-                image: const AssetImage("assets/logo.png"),
-                width: MediaQuery.of(context).size.width * 0.8,
+              AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _animation.value,
+                    child: RotationTransition(
+                      turns: _animation,
+                      child: Image.asset(
+                        "assets/logo.png",
+                        width: MediaQuery.of(context).size.width * 0.8,
+                      ),
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
