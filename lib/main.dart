@@ -19,7 +19,6 @@ void main() async {
     debugPrint('APP INSTALLED!');
   });
 
-
   // Controlla se esiste un nome utente memorizzato nelle shared preferences
   String? storedUserName = GetStorage().read<String>('userName');
   if (storedUserName != null) {
@@ -56,61 +55,73 @@ class LoginPage extends StatelessWidget {
     DbService dbService = DbService();
 
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-             Image(image: const AssetImage("assets/logo.png"),
-                 width:MediaQuery.of(context).size.width * 0.8,),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: TextField(
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  userName = value;
-                },
-                textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  hintText: 'Inserisci il tuo nome...',
-                  hintStyle: TextStyle(fontSize: 14),
-                  icon: Icon(Icons.person),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(
+                image: const AssetImage("assets/logo.png"),
+                width: MediaQuery.of(context).size.width * 0.8,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  onChanged: (value) {
+                    userName = value;
+                  },
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(
+                    hintText: 'Inserisci il tuo nome...',
+                    hintStyle: TextStyle(fontSize: 14),
+                    icon: Icon(Icons.person),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                // Capitalizza la prima lettera del nome utente
-                if (userName.isNotEmpty) {
-                  userName = userName[0].toUpperCase() + userName.substring(1);
-                }
+              const SizedBox(
+                height: 40,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  // Capitalizza la prima lettera del nome utente
+                  if (userName.isNotEmpty) {
+                    userName =
+                        userName[0].toUpperCase() + userName.substring(1);
+                  }
 
-                // Controlla se il nome utente esiste nel database
-                bool nameExists = await dbService.checkUserNameExists(userName);
-                if (nameExists) {
-                  // Naviga alla schermata principale
-                  Get.offNamed(AppRoutes.mainScreen);
-                  // Salva il nome utente nel GetStorage
-                  GetStorage().write('userName', userName);
-                } else {
-                  // Mostra uno Snackbar di errore
-                  Get.snackbar(
-                    'Accesso Fallito',
-                    'Sei così stupido che non sai il tuo nome?',
-                    icon: const Icon(
-                      Icons.error_sharp,
-                      color: Colors.white,
-                    ),
-                    backgroundColor: Colors.red,
-                    colorText: Colors.white,
-                  );
-                }
-              },
-              child: const Text('Login'),
-            ),
-          ],
+                  // Controlla se il nome utente esiste nel database
+                  bool nameExists =
+                  await dbService.checkUserNameExists(userName);
+                  if (nameExists) {
+                    // Naviga alla schermata principale
+                    Get.offNamed(AppRoutes.mainScreen);
+                    // Salva il nome utente nel GetStorage
+                    GetStorage().write('userName', userName);
+                  } else {
+                    // Mostra uno Snackbar di errore
+                    Get.snackbar(
+                      'Accesso Fallito',
+                      'Sei così stupido che non sai il tuo nome?',
+                      icon: const Icon(
+                        Icons.error_sharp,
+                        color: Colors.white,
+                      ),
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                  }
+                },
+                child: const Text('Login'),
+              ),
+            ],
+          ),
         ),
       ),
     );
