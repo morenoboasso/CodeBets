@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pwa_install/pwa_install.dart';
 import 'firebase_options.dart';
 import 'services/db_service.dart';
 
@@ -12,6 +13,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await GetStorage.init(); // Inizializza GetStorage
+
+  //pwa installing check
+  PWAInstall().setup(installCallback: () {
+    debugPrint('APP INSTALLED!');
+  });
+
 
   // Controlla se esiste un nome utente memorizzato nelle shared preferences
   String? storedUserName = GetStorage().read<String>('userName');
