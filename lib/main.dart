@@ -1,6 +1,9 @@
 import 'package:codebets/routes.dart';
-import 'package:get/get.dart';
+import 'package:codebets/style/color_style.dart';
+import 'package:codebets/style/text_style.dart';
+import 'package:codebets/widgets/input/login_input.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pwa_install/pwa_install.dart';
@@ -62,7 +65,7 @@ class _LoginPageState extends State<LoginPage>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
     _animation = CurvedAnimation(
@@ -84,86 +87,117 @@ class _LoginPageState extends State<LoginPage>
     DbService dbService = DbService();
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/bg.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: _animation.value,
-                    child: RotationTransition(
-                      turns: _animation,
-                      child: Image.asset(
-                        "assets/logo.png",
-                        width: MediaQuery.of(context).size.width * 0.8,
-                      ),
-                    ),
-                  );
-                },
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/bg.png"),
+                fit: BoxFit.cover,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    userName = value;
-                  },
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                    hintText: 'Inserisci il tuo nome...',
-                    hintStyle: TextStyle(fontSize: 14),
-                    icon: Icon(Icons.person),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: _animation.value,
+                        child: RotationTransition(
+                          turns: _animation,
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                "assets/logo.png",
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.6,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
+                  const SizedBox(height: 20,),
+                  Text(
+                    "Login",
+                    style: TextStyleBets.titleBlue,
+                  ),
+                  const SizedBox(height: 40,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            onChanged: (value) {
+                              userName = value;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (userName.isNotEmpty) {
+                              userName = userName[0].toUpperCase() +
+                                  userName.substring(1);
+                            }
+
+                            bool nameExists = await dbService
+                                .checkUserNameExists(userName);
+                            if (nameExists) {
+                              Get.offNamed(AppRoutes.mainScreen);
+                              GetStorage().write('userName', userName);
+                            } else {
+                              Get.snackbar(
+                                'Accesso Fallito',
+                                'Sei così stupido che non sai il tuo nome?',
+                                icon: const Icon(Icons.error_sharp, color: Colors.white,),
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            backgroundColor: ColorsBets.blueHD,
+                            padding: const EdgeInsets.all(18),
+                          ),
+                          child: const Icon(Icons.arrow_forward, size: 28, color: Colors.white,),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Positioned(
+            left: 0, right: 0, bottom: 10,
+            child: Align(alignment: Alignment.bottomCenter,
+              child: Padding(padding:  EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  "Questo gioco crea dipendenza, pertanto è vietato ai minori di 18 anni.",
+                  style: TextStyle(
+                    color: Colors.black45,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(
-                height: 40,
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  // Capitalizza la prima lettera del nome utente
-                  if (userName.isNotEmpty) {
-                    userName =
-                        userName[0].toUpperCase() + userName.substring(1);
-                  }
-
-                  // Controlla se il nome utente esiste nel database
-                  bool nameExists =
-                  await dbService.checkUserNameExists(userName);
-                  if (nameExists) {
-                    // Naviga alla schermata principale
-                    Get.offNamed(AppRoutes.mainScreen);
-                    // Salva il nome utente nel GetStorage
-                    GetStorage().write('userName', userName);
-                  } else {
-                    // Mostra uno Snackbar di errore
-                    Get.snackbar(
-                      'Accesso Fallito',
-                      'Sei così stupido che non sai il tuo nome?',
-                      icon: const Icon(
-                        Icons.error_sharp,
-                        color: Colors.white,
-                      ),
-                      backgroundColor: Colors.red,
-                      colorText: Colors.white,
-                    );
-                  }
-                },
-                child: const Text('Login'),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
-  }
-}
+  }}

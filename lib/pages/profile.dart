@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import '../main.dart';
 import '../services/db_service.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -72,11 +73,25 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void _logout() {
+    _storage.remove('userName'); // Rimuovi il nome memorizzato
+    Navigator.pushReplacement( // Reindirizza alla schermata di login o chiudi l'app
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Il mio profilo'),
+        actions: [
+          IconButton(
+            onPressed: _logout,
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -127,8 +142,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             const SizedBox(height: 20),
-
-
             if (_userTargetBets > 0)
               const FractionallySizedBox(
                 widthFactor: 0.5,
@@ -153,14 +166,12 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             if (_userTargetBets > 0)
               const FractionallySizedBox(
-              widthFactor: 0.7,
-              child: SizedBox(
-                width: 50,
-                child: Divider(),
+                widthFactor: 0.7,
+                child: SizedBox(
+                  width: 50,
+                  child: Divider(),
+                ),
               ),
-            ),
-
-
             const SizedBox(height: 20),
           ],
         ),
