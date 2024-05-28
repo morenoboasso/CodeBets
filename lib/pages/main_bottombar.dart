@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:codebets/style/color_style.dart';
 import 'package:codebets/pages/ping_pong.dart';
 import 'package:codebets/pages/profile.dart';
-import 'package:flutter/material.dart';
-
 import 'bets/active_bets.dart';
 import 'bets/create_bet.dart';
 import 'leaderboard.dart';
@@ -34,39 +34,47 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true, // To make sure the body is drawn behind the bottom navigation bar
       body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on_rounded),
-            label: 'Attive',
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: ColorsBets.whiteHD,
+            borderRadius: BorderRadius.circular(7.0),
+            border: Border.all(color: ColorsBets.blueHD, width: 1.8),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_add),
-            label: 'Aggiungi',
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(7.0),
+            child: BottomNavigationBar(
+              elevation: 0,
+              iconSize: 24,
+              selectedIconTheme: const IconThemeData(size: 28),
+              unselectedIconTheme: const IconThemeData(size: 24),
+              items: <BottomNavigationBarItem>[
+                _buildNavigationBarItem(Icons.question_answer, 'Attive', 0),
+                _buildNavigationBarItem(Icons.add_box, 'Crea', 1),
+                _buildNavigationBarItem(Icons.emoji_events, 'Classifica', 2),
+                _buildNavigationBarItem(Icons.sports_baseball_rounded, 'Ping Pong', 3),
+                _buildNavigationBarItem(Icons.person, 'Profilo', 4),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: ColorsBets.blueHD,
+              unselectedItemColor: ColorsBets.blackHD.withOpacity(0.4),
+              showSelectedLabels: true, // Hide selected labels
+              showUnselectedLabels: false, // Hide unselected labels
+              onTap: _onItemTapped,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events),
-            label: 'Classifica',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sports),
-            label: 'Ping Pong',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profilo',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.orangeAccent,
-        unselectedItemColor: Colors.grey,
-        unselectedLabelStyle: const TextStyle(color: Colors.grey,fontSize: 10),
-        showUnselectedLabels: true,
-        onTap: _onItemTapped,
+        ),
       ),
     );
   }
+
+  BottomNavigationBarItem _buildNavigationBarItem(IconData icon, String label, int index) {
+    return BottomNavigationBarItem(
+      icon: Icon(icon),
+      label: label,
+    );
+  }
 }
-
-

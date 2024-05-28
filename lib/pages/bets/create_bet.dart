@@ -46,111 +46,114 @@ class _CreateBetPageState extends State<CreateBetPage> {
         children: [
           Container(
             decoration: const BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/bg.png"),
+              image: DecorationImage(
+                image: AssetImage("assets/bg.png"),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _submit();
-                            }
-                          },
-                          child:  Row(
-                            children: [
-                              Text(
-                                'Crea',
-                                style: TextStyleBets.betTextTitle
-                              ),
-                              const SizedBox(width: 5),
-                               const Icon(Icons.arrow_forward,color: ColorsBets.blueHD,),
-                            ],
+          SafeArea(
+            bottom: true,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                _submit();
+                              }
+                            },
+                            child:  Row(
+                              children: [
+                                Text(
+                                    'Crea',
+                                    style: TextStyleBets.betTextTitle
+                                ),
+                                const SizedBox(width: 5),
+                                const Icon(Icons.arrow_forward, color: ColorsBets.blueHD),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    BetTitleFormField(
-                      formKey: _formKey,
-                      onSaved: (newValue) {
-                        _title = newValue!;
-                      },
-                    ),
-                    BetTargetDropdownFormField(
-                      usersList: _usersList,
-                      selectedUser: _selectedUser,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedUser = newValue;
-                        });
-                      },
-                    ),
-                    BetDescriptionFormField(
-                      onChanged: (value) {
-                        _description = value;
-                      },
-                    ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 1*',
-                      hintText: "Es. Sì",
-                      onSaved: (newValue) {
-                        _answer1 = newValue!;
-                      },
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Inserisci la prima risposta';
-                        }
-                        return null;
-                      },
-                    ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 2*',
-                      hintText: "Es. No",
-                      onSaved: (newValue) {
-                        _answer2 = newValue!;
-                      },
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Inserisci la seconda risposta';
-                        }
-                        return null;
-                      },
-                    ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 3',
-                      hintText: "Es. Yes",
-                      onSaved: (newValue) {
-                        _answer3 = newValue ?? '';
-                      },
-                      validator: (value) {
-                        return null; // Nessuna validazione necessaria
-                      },
-                    ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 4',
-                      hintText: "Es. No",
-                      onSaved: (newValue) {
-                        _answer4 = newValue ?? '';
-                      },
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      BetTitleFormField(
+                        formKey: _formKey,
+                        onSaved: (newValue) {
+                          _title = newValue!;
+                        },
+                      ),
+                      BetTargetDropdownFormField(
+                        usersList: _usersList,
+                        selectedUser: _selectedUser,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedUser = newValue;
+                          });
+                        },
+                      ),
+                      BetDescriptionFormField(
+                        onChanged: (value) {
+                          _description = value;
+                        },
+                      ),
+                      BetAnswerFormField(
+                        labelText: 'Risposta 1*',
+                        hintText: "Es. Sì",
+                        onSaved: (newValue) {
+                          _answer1 = newValue!;
+                        },
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Inserisci la prima risposta';
+                          }
+                          return null;
+                        },
+                      ),
+                      BetAnswerFormField(
+                        labelText: 'Risposta 2*',
+                        hintText: "Es. No",
+                        onSaved: (newValue) {
+                          _answer2 = newValue!;
+                        },
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Inserisci la seconda risposta';
+                          }
+                          return null;
+                        },
+                      ),
+                      BetAnswerFormField(
+                        labelText: 'Risposta 3',
+                        hintText: "Es. Yes",
+                        onSaved: (newValue) {
+                          _answer3 = newValue ?? '';
+                        },
+                        validator: (value) {
+                          return null; // Nessuna validazione necessaria
+                        },
+                      ),
+                      BetAnswerFormField(
+                        labelText: 'Risposta 4',
+                        hintText: "Es. No",
+                        onSaved: (newValue) {
+                          _answer4 = newValue ?? '';
+                        },
+                        validator: (value) {
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -160,6 +163,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
       floatingActionButton: kDebugMode ? const ClearButton() : null,
     );
   }
+
 
 
   Future<void> _submit() async {
