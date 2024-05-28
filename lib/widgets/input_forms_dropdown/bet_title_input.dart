@@ -37,9 +37,7 @@ class BetTitleFormField extends StatelessWidget {
               cursorRadius: const Radius.circular(20),
               cursorWidth: 2.5,
               //text
-              enableSuggestions: false,
               keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.words,
               style: TextStyleBets.hintTextTitle,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 15.0),

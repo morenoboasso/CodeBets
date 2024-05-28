@@ -23,10 +23,6 @@ class BetTargetDropdownFormField extends StatelessWidget {
           'Target',
           style: TextStyleBets.inputTextTitle,
         ),
-        Text(
-          "Il Target non sarà consapevole della scommessa, ma al termine guadagnerà comunque 2 punti.",          style: TextStyleBets.targetTextDescription,
-          textAlign: TextAlign.start,
-        ),
         const SizedBox(height: 4,),
         ConstrainedBox(
           constraints: const BoxConstraints(
