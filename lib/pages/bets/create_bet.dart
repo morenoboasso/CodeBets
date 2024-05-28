@@ -4,16 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-
 import '../../services/db_service.dart';
+import '../../widgets/input/bet_descr_input.dart';
+import '../../widgets/input/bet_risposte_input.dart';
+import '../../widgets/input/bet_target_dropdown.dart';
+import '../../widgets/input/bet_title_input.dart';
 
 class CreateBetPage extends StatefulWidget {
   const CreateBetPage({super.key});
-
   @override
   _CreateBetPageState createState() => _CreateBetPageState();
 }
-
 class _CreateBetPageState extends State<CreateBetPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String _title;
@@ -24,7 +25,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
   String _answer4 = '';
   String? _selectedUser;
   List<String> _usersList = [];
-
   DbService dbService = DbService();
 
   @override
@@ -36,146 +36,112 @@ class _CreateBetPageState extends State<CreateBetPage> {
   Future<void> _loadUsers() async {
     DbService dbService = DbService();
     List<String> usersList = await dbService.getUsersList();
-    setState(() {
-      _usersList = usersList;
-    });
+    setState(() {_usersList = usersList;});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crea Scommessa'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Titolo*',
-                    hintText: "Es. Rob bestemmierà oggi?",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Inserisci il titolo della scommessa';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _title = newValue!;
-                  },
-                  maxLength: 70,
-                ),
-                DropdownButtonFormField<String>(
-                  value: _selectedUser,
-                  items: _usersList
-                      .where((user) => user != 'admin')
-                      .map((String user) {
-                    return DropdownMenuItem<String>(
-                      value: user,
-                      child: Text(user),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedUser = newValue;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Target (se presente)',
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Descrizione',
-                    hintText: "Es. Chi dimenticherà qualcosa nella sala ping pong?",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  onChanged: (value) {
-                    _description = value;
-                  },
-                  maxLines: null,
-                  maxLength: 150,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Risposta 1*',
-                    hintText: "Es. Sì",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Inserisci la prima risposta';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _answer1 = newValue!;
-                  },
-                  maxLength: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Risposta 2*',
-                    hintText: "Es. No",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Inserisci la seconda risposta';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    _answer2 = newValue!;
-                  },
-                  maxLength: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Risposta 3',
-                    hintText: "Es. Robert Cadrà per terra",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  onSaved: (newValue) {
-                    _answer3 = newValue ?? '';
-                  },
-                  maxLength: 20,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Risposta 4',
-                    hintText: "Es. Lia rimarrà chiusa fuori dall'ufficio",
-                    hintStyle: TextStyle(fontSize: 12),
-                  ),
-                  onSaved: (newValue) {
-                    _answer4 = newValue ?? '';
-                  },
-                  maxLength: 20,
-                ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        _submit();
-                      }
-                    },
-                    child: const Text('Crea Scommessa'),
-                  ),
-                ),
-              ],
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(image: AssetImage("assets/bg.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BetTitleFormField(
+                      formKey: _formKey,
+                      onSaved: (newValue) {
+                        _title = newValue!;
+                      },
+                    ),
+                    BetTargetDropdownFormField(
+                      usersList: _usersList,
+                      selectedUser: _selectedUser,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedUser = newValue;
+                        });
+                      },
+                    ),
+                    BetDescriptionFormField(
+                      onChanged: (value) {
+                        _description = value;
+                      },
+                    ),
+                    BetAnswerFormField(
+                      labelText: 'Risposta 1*',
+                      hintText: "Es. Sì",
+                      onSaved: (newValue) {
+                        _answer1 = newValue!;
+                      },
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Inserisci la prima risposta';
+                        }
+                        return null;
+                      },
+                    ),
+                    BetAnswerFormField(
+                      labelText: 'Risposta 2*',
+                      hintText: "Es. No",
+                      onSaved: (newValue) {
+                        _answer2 = newValue!;
+                      },
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Inserisci la seconda risposta';
+                        }
+                        return null;
+                      },
+                    ),
+                    BetAnswerFormField(
+                      labelText: 'Risposta 3',
+                      hintText: "Es. Yes",
+                      onSaved: (newValue) {
+                        _answer3 = newValue ?? '';
+                      },
+                      validator: (value) {
+                        return null; // Nessuna validazione necessaria
+                      },
+                    ),
+                    BetAnswerFormField(
+                      labelText: 'Risposta 4',
+                      hintText: "Es. No",
+                      onSaved: (newValue) {
+                        _answer4 = newValue ?? '';
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            _submit();
+                          }
+                        },
+                        child: const Text('Crea Scommessa'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: kDebugMode
           ? FloatingActionButton.extended(
@@ -201,9 +167,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
         label: const Text('Clear'),
       )
           : null,
-
     );
   }
+
 
   Future<void> _submit() async {
     String currentDate = DateFormat('HH:mm - d MMMM yyyy').format(DateTime.now());
