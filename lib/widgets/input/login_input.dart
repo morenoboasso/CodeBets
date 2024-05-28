@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:codebets/style/text_style.dart';
 import '../../style/color_style.dart';
 
-class CustomTextField extends StatelessWidget {
+class LoginTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
-  const CustomTextField({super.key, required this.onChanged});
+  const LoginTextField({super.key, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

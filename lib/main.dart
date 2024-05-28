@@ -128,49 +128,57 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyleBets.titleBlue,
                   ),
                   const SizedBox(height: 40,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            onChanged: (value) {
-                              userName = value;
-                            },
+                  Container(
+                    height: 60, // Altezza desiderata
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: LoginTextField(
+                              onChanged: (value) {
+                                userName = value;
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 5),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (userName.isNotEmpty) {
-                              userName = userName[0].toUpperCase() +
-                                  userName.substring(1);
-                            }
+                          const SizedBox(width: 5),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (userName.isNotEmpty) {
+                                userName = userName[0].toUpperCase() + userName.substring(1);
+                              }
 
-                            bool nameExists = await dbService
-                                .checkUserNameExists(userName);
-                            if (nameExists) {
-                              Get.offNamed(AppRoutes.mainScreen);
-                              GetStorage().write('userName', userName);
-                            } else {
-                              Get.snackbar(
-                                'Accesso Fallito',
-                                'Sei così stupido che non sai il tuo nome?',
-                                icon: const Icon(Icons.error_sharp, color: Colors.white,),
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            backgroundColor: ColorsBets.blueHD,
-                            padding: const EdgeInsets.all(18),
+                              bool nameExists = await dbService.checkUserNameExists(userName);
+                              if (nameExists) {
+                                Get.offNamed(AppRoutes.mainScreen);
+                                GetStorage().write('userName', userName);
+                              } else {
+                                Get.snackbar(
+                                  'Accesso Fallito',
+                                  'Sei così stupido che non sai il tuo nome?',
+                                  icon: const Icon(
+                                    Icons.error_sharp,
+                                    color: Colors.white,
+                                  ),
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: ColorsBets.blueHD,
+                              padding: const EdgeInsets.all(10),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward,
+                              size: 30,
+                              color: Colors.white,
+                            ),
                           ),
-                          child: const Icon(Icons.arrow_forward, size: 28, color: Colors.white,),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -182,10 +190,12 @@ class _LoginPageState extends State<LoginPage>
           ),
           const Positioned(
             left: 0, right: 0, bottom: 10,
-            child: Align(alignment: Alignment.bottomCenter,
-              child: Padding(padding:  EdgeInsets.symmetric(horizontal: 10),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "Questo gioco crea dipendenza, pertanto è vietato ai minori di 18 anni.",
+                  "Questo gioco crea dipendenza, pertanto è vietato ai minori di 18.",
                   style: TextStyle(
                     color: Colors.black45,
                     fontStyle: FontStyle.italic,
@@ -200,4 +210,5 @@ class _LoginPageState extends State<LoginPage>
         ],
       ),
     );
-  }}
+  }
+}
