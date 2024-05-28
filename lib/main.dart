@@ -111,10 +111,7 @@ class _LoginPageState extends State<LoginPage>
                             children: [
                               Image.asset(
                                 "assets/logo.png",
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.6,
+                                width: MediaQuery.of(context).size.width * 0.6,
                               ),
                             ],
                           ),
@@ -128,8 +125,8 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyleBets.titleBlue,
                   ),
                   const SizedBox(height: 40,),
-                  Container(
-                    height: 60, // Altezza desiderata
+                  SizedBox(
+                    height: 60,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
                       child: Row(
@@ -148,7 +145,6 @@ class _LoginPageState extends State<LoginPage>
                               if (userName.isNotEmpty) {
                                 userName = userName[0].toUpperCase() + userName.substring(1);
                               }
-
                               bool nameExists = await dbService.checkUserNameExists(userName);
                               if (nameExists) {
                                 Get.offNamed(AppRoutes.mainScreen);
@@ -181,9 +177,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  const SizedBox(height: 40,),
                 ],
               ),
             ),
@@ -193,7 +187,7 @@ class _LoginPageState extends State<LoginPage>
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   "Questo gioco crea dipendenza, pertanto è vietato ai minori di 18.",
                   style: TextStyle(
