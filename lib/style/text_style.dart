@@ -35,6 +35,11 @@ class TextStyleBets {
     fontWeight: FontWeight.bold,
     color: ColorsBets.blackHD.withOpacity(0.6),
   );
+  static TextStyle get targetTextDescription =>  TextStyle(
+    fontSize: 12,
+    fontStyle: FontStyle.italic,
+    color: ColorsBets.blackHD.withOpacity(0.6),
+  );
   //bet form text
   static TextStyle get hintTextAnswer => TextStyle(
     fontSize: 15,
