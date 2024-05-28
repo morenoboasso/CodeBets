@@ -22,20 +22,29 @@ class TextStyleBets {
         fontWeight: FontWeight.bold,
         color: ColorsBets.blueHD,
       );
-  //
+  //create bet
+  //bet input form
   static TextStyle get inputTextTitle => const TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
     color: ColorsBets.blackHD,
   );
+  //bet hint form
   static TextStyle get hintTextTitle =>  TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.bold,
     color: ColorsBets.blackHD.withOpacity(0.6),
   );
+  //bet form text
   static TextStyle get hintTextAnswer => TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.bold,
     color: ColorsBets.blackHD.withOpacity(0.3),
+  );
+  //titolo schermata bet
+  static TextStyle get betTextTitle => const TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.blueHD,
   );
 }

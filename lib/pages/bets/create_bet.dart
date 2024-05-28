@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:codebets/style/text_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import '../../services/db_service.dart';
-import '../../widgets/input/bet_descr_input.dart';
-import '../../widgets/input/bet_risposte_input.dart';
-import '../../widgets/input/bet_target_dropdown.dart';
-import '../../widgets/input/bet_title_input.dart';
+import '../../style/color_style.dart';
+import '../../widgets/debug_only/clear_bets.dart';
+import '../../widgets/input_forms_dropdown/bet_descr_input.dart';
+import '../../widgets/input_forms_dropdown/bet_risposte_input.dart';
+import '../../widgets/input_forms_dropdown/bet_target_dropdown.dart';
+import '../../widgets/input_forms_dropdown/bet_title_input.dart';
 
 class CreateBetPage extends StatefulWidget {
   const CreateBetPage({super.key});
@@ -19,10 +21,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String _title;
   String _description = '';
-  String _answer1 = '';
-  String _answer2 = '';
-  String _answer3 = '';
-  String _answer4 = '';
+  String _answer1 = '';String _answer2 = '';
+  String _answer3 = '';String _answer4 = '';
   String? _selectedUser;
   List<String> _usersList = [];
   DbService dbService = DbService();
@@ -59,6 +59,31 @@ class _CreateBetPageState extends State<CreateBetPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 20,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              _submit();
+                            }
+                          },
+                          child:  Row(
+                            children: [
+                              Text(
+                                'Crea',
+                                style: TextStyleBets.betTextTitle
+                              ),
+                              const SizedBox(width: 5),
+                               const Icon(Icons.arrow_forward,color: ColorsBets.blueHD,),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
                     BetTitleFormField(
                       formKey: _formKey,
                       onSaved: (newValue) {
@@ -125,17 +150,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
                         return null;
                       },
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            _submit();
-                          }
-                        },
-                        child: const Text('Crea Scommessa'),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -143,30 +157,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
           ),
         ],
       ),
-      floatingActionButton: kDebugMode
-          ? FloatingActionButton.extended(
-        onPressed: () async {
-          await Firebase.initializeApp();
-          FirebaseFirestore firestore = FirebaseFirestore.instance;
-          debugPrint("Cancellata collezione scommesse e risposte dal DB");
-          // Cancella la collezione "scommesse"
-          await firestore.collection('scommesse').get().then((querySnapshot) {
-            for (var doc in querySnapshot.docs) {
-              doc.reference.delete();
-            }
-          });
-          // Cancella la collezione "risposte"
-          await firestore.collection('risposte').get().then((querySnapshot) {
-            for (var doc in querySnapshot.docs) {
-              doc.reference.delete();
-            }
-          });
-        },
-        tooltip: "Cancella tutte le scommesse e le risposte",
-        icon: const Icon(Icons.delete_sweep),
-        label: const Text('Clear'),
-      )
-          : null,
+      floatingActionButton: kDebugMode ? const ClearButton() : null,
     );
   }
 
@@ -174,32 +165,10 @@ class _CreateBetPageState extends State<CreateBetPage> {
   Future<void> _submit() async {
     String currentDate = DateFormat('HH:mm - d MMMM yyyy').format(DateTime.now());
     String? userName = GetStorage().read<String>('userName');
-    debugPrint('Titolo: $_title');
-    debugPrint('Target: $_selectedUser');
-    if (_description.isNotEmpty) {
-      debugPrint('Descrizione: $_description');
-    }
-    debugPrint('Data di creazione: $currentDate');
-    debugPrint('Creatore: $userName');
-
-    if (_answer1.isNotEmpty) {
-      debugPrint('Risposta 1: $_answer1');
-    }
-    if (_answer2.isNotEmpty) {
-      debugPrint('Risposta 2: $_answer2');
-    }
-    if (_answer3.isNotEmpty) {
-      debugPrint('Risposta 3: $_answer3');
-    }
-    if (_answer4.isNotEmpty) {
-      debugPrint('Risposta 4: $_answer4');
-    }
     // Ottieni il riferimento al documento dell'utente nel database
     DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(userName);
-
     // Incrementa il conteggio delle scommesse create per l'utente
     await userRef.update({'scommesse_create': FieldValue.increment(1)});
-
     // Visualizza il  loading
     showDialog(
       context: context,
@@ -213,11 +182,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
         );
       },
     );
-
 //simulo ritardo
     await Future.delayed(const Duration(milliseconds: 350));
-
-
     // Crea un nuovo documento nella collezione "scommesse"
     DocumentReference betRef = await FirebaseFirestore.instance.collection('scommesse').add({
       'titolo': _title.trim(),
@@ -230,9 +196,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
       'data_creazione': currentDate,
       'creatore': userName,
     });
-
     String betId = betRef.id;
-
     // Crea le risposte associate alla scommessa nel database
     List<String> usersList = await dbService.getUsersList();
     for (String user in usersList) {
@@ -242,7 +206,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
         'risposta_scelta': '',
       });
     }
-
 //chiudo il loading e mostro la snackbar successo
     Navigator.pop(context);
     const snackBar = SnackBar(
@@ -252,15 +215,12 @@ class _CreateBetPageState extends State<CreateBetPage> {
         children: [
           Icon(Icons.check, color: Colors.white),
           SizedBox(width: 10),
-          Text('Scommessa creata con successo!',
-              style: TextStyle(color: Colors.white)),
+          Text('Scommessa creata con successo!', style: TextStyle(color: ColorsBets.whiteHD)),
         ],
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    debugPrint('Dati inviati al database Firebase con successo!');
     _resetForm();
-
   }
   void _resetForm() {
     setState(() {
