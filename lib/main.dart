@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pwa_install/pwa_install.dart';
 import 'firebase_options.dart';
+import 'package:vibration/vibration.dart';
 import 'services/db_service.dart';
 
 void main() async {
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage>
                           Expanded(
                             child: LoginTextField(
                               onChanged: (value) {
-                                userName = value;
+                                userName = value.trim();
                               },
                             ),
                           ),
@@ -150,6 +151,7 @@ class _LoginPageState extends State<LoginPage>
                                 Get.offNamed(AppRoutes.mainScreen);
                                 GetStorage().write('userName', userName);
                               } else {
+                                Vibration.vibrate(duration: 200, amplitude: 128);
                                 Get.snackbar(
                                   'Accesso Fallito',
                                   'Sei così stupido che non sai il tuo nome?',
