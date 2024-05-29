@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codebets/style/text_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
 import '../../services/db_service.dart';
+import '../../services/submit_bet.dart';
 import '../../style/color_style.dart';
 import '../../widgets/debug_only/clear_bets.dart';
 import '../../widgets/input_forms_dropdown/bet_descr_input.dart';
@@ -17,12 +15,15 @@ class CreateBetPage extends StatefulWidget {
   @override
   _CreateBetPageState createState() => _CreateBetPageState();
 }
+
 class _CreateBetPageState extends State<CreateBetPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String _title;
   String _description = '';
-  String _answer1 = '';String _answer2 = '';
-  String _answer3 = '';String _answer4 = '';
+  String _answer1 = '';
+  String _answer2 = '';
+  String _answer3 = '';
+  String _answer4 = '';
   String? _selectedUser;
   List<String> _usersList = [];
   DbService dbService = DbService();
@@ -34,9 +35,10 @@ class _CreateBetPageState extends State<CreateBetPage> {
   }
 
   Future<void> _loadUsers() async {
-    DbService dbService = DbService();
     List<String> usersList = await dbService.getUsersList();
-    setState(() {_usersList = usersList;});
+    setState(() {
+      _usersList = usersList;
+    });
   }
 
   @override
@@ -72,12 +74,9 @@ class _CreateBetPageState extends State<CreateBetPage> {
                                 _submit();
                               }
                             },
-                            child:  Row(
+                            child: Row(
                               children: [
-                                Text(
-                                    'Crea',
-                                    style: TextStyleBets.betTextTitle
-                                ),
+                                Text('Crea', style: TextStyleBets.betTextTitle),
                                 const SizedBox(width: 5),
                                 const Icon(Icons.arrow_forward, color: ColorsBets.blueHD),
                               ],
@@ -139,12 +138,12 @@ class _CreateBetPageState extends State<CreateBetPage> {
                           _answer3 = newValue ?? '';
                         },
                         validator: (value) {
-                          return null; // Nessuna validazione necessaria
+                          return null;
                         },
                       ),
                       BetAnswerFormField(
                         labelText: 'Risposta 4',
-                        hintText: "Es. No",
+                        hintText: "Es. Nope",
                         onSaved: (newValue) {
                           _answer4 = newValue ?? '';
                         },
@@ -164,67 +163,20 @@ class _CreateBetPageState extends State<CreateBetPage> {
     );
   }
 
-
-
   Future<void> _submit() async {
-    String currentDate = DateFormat('HH:mm - d MMMM yyyy').format(DateTime.now());
-    String? userName = GetStorage().read<String>('userName');
-    // Ottieni il riferimento al documento dell'utente nel database
-    DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(userName);
-    // Incrementa il conteggio delle scommesse create per l'utente
-    await userRef.update({'scommesse_create': FieldValue.increment(1)});
-    // Visualizza il  loading
-    showDialog(
+    SubmitBetService submitBetService = SubmitBetService(
       context: context,
-      barrierDismissible: false, // Impedisce la chiusura del dialog
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.orangeAccent,
-            color: Colors.orange,
-          ),
-        );
-      },
+      title: _title,
+      selectedUser: _selectedUser,
+      description: _description,
+      answer1: _answer1,
+      answer2: _answer2,
+      answer3: _answer3,
+      answer4: _answer4,
+      formKey: _formKey,
+      resetForm: _resetForm,
     );
-//simulo ritardo
-    await Future.delayed(const Duration(milliseconds: 350));
-    // Crea un nuovo documento nella collezione "scommesse"
-    DocumentReference betRef = await FirebaseFirestore.instance.collection('scommesse').add({
-      'titolo': _title.trim(),
-      'target': _selectedUser,
-      'descrizione': _description.trim(),
-      'risposta1': _answer1.trim(),
-      'risposta2': _answer2.trim(),
-      'risposta3': _answer3.trim(),
-      'risposta4': _answer4.trim(),
-      'data_creazione': currentDate,
-      'creatore': userName,
-    });
-    String betId = betRef.id;
-    // Crea le risposte associate alla scommessa nel database
-    List<String> usersList = await dbService.getUsersList();
-    for (String user in usersList) {
-      await FirebaseFirestore.instance.collection('risposte').add({
-        'scommessa_id': betId,
-        'utente': user,
-        'risposta_scelta': '',
-      });
-    }
-//chiudo il loading e mostro la snackbar successo
-    Navigator.pop(context);
-    const snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.green,
-      content: Row(
-        children: [
-          Icon(Icons.check, color: Colors.white),
-          SizedBox(width: 10),
-          Text('Scommessa creata con successo!', style: TextStyle(color: ColorsBets.whiteHD)),
-        ],
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    _resetForm();
+    await submitBetService.submit();
   }
   void _resetForm() {
     setState(() {
