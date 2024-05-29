@@ -19,11 +19,39 @@ class BetTargetDropdownFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Target',
-          style: TextStyleBets.inputTextTitle,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Target',
+              style: TextStyleBets.inputTextTitle,
+            ),
+            IconButton(
+              icon: const Icon(Icons.info_outline,size: 24,),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Cos'è il target?",textAlign: TextAlign.center,),
+                      content: const Text(
+                          'Il target è la persona che sarà al centro della scommessa.\nQuesta persona non verrà informata della scommessa, ma alla fine otterrà 2 punti.',
+                        textAlign: TextAlign.center,),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Chiudi'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
-        const SizedBox(height: 4,),
         ConstrainedBox(
           constraints: const BoxConstraints(
             minHeight: 70,
@@ -36,9 +64,7 @@ class BetTargetDropdownFormField extends StatelessWidget {
                 value: null,
                 child: Text('Nessun target'),
               ),
-              ...usersList
-                  .where((user) => user != 'Admin')
-                  .map((String user) {
+              ...usersList.where((user) => user != 'Admin').map((String user) {
                 return DropdownMenuItem<String>(
                   value: user,
                   child: Text(user),
