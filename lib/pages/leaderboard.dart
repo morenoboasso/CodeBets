@@ -35,7 +35,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   List<MapEntry<String, int>> _getSortedUsers() {
     List<MapEntry<String, int>> sortedUsers = _usersData.entries
-        .where((entry) => entry.key != 'admin')
+        .where((entry) => entry.key != 'Admin')
         .map((entry) =>
         MapEntry<String, int>(entry.key, _getOrderByValue(entry)))
         .toList();

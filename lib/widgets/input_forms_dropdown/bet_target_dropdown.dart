@@ -37,7 +37,7 @@ class BetTargetDropdownFormField extends StatelessWidget {
                 child: Text('Nessun target'),
               ),
               ...usersList
-                  .where((user) => user != 'admin')
+                  .where((user) => user != 'Admin')
                   .map((String user) {
                 return DropdownMenuItem<String>(
                   value: user,
