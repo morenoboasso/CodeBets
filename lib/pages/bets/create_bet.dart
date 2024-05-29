@@ -174,6 +174,14 @@ class _CreateBetPageState extends State<CreateBetPage> {
                         ),
                       ],
                     ),
+                    if (kDebugMode)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child:
+                        Center (
+                          child: ClearButton(),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -181,7 +189,6 @@ class _CreateBetPageState extends State<CreateBetPage> {
           ),
         ],
       ),
-      floatingActionButton: kDebugMode ? const ClearButton() : null,
     );
   }
 
@@ -200,6 +207,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
     );
     await submitBetService.submit();
   }
+
   void _resetForm() {
     setState(() {
       _formKey.currentState?.reset();

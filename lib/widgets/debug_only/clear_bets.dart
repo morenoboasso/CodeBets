@@ -7,7 +7,7 @@ class ClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
+    return ElevatedButton.icon(
       onPressed: () async {
         await Firebase.initializeApp();
         FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -25,9 +25,13 @@ class ClearButton extends StatelessWidget {
           }
         });
       },
-      tooltip: "Cancella tutte le scommesse e le risposte",
       icon: const Icon(Icons.delete_sweep),
-      label: const Text('Clear'),
+      label: const Text('Cancella Bets Attive'),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.red,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      ),
     );
   }
 }
