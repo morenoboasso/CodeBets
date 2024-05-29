@@ -151,6 +151,27 @@ class _CreateBetPageState extends State<CreateBetPage> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                _submit();
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Text('Crea', style: TextStyleBets.betTextTitle),
+                                const SizedBox(width: 5),
+                                const Icon(Icons.arrow_forward, color: ColorsBets.blueHD),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
