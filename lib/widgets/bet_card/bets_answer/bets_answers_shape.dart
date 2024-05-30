@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
-import '../../style/color_style.dart';
+import '../../../style/color_style.dart';
 class AnswerContainer extends StatelessWidget {
   final String answer;
   final Color color;

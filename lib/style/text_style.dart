@@ -83,4 +83,10 @@ static TextStyle get selectedAnswer => const TextStyle(
     color: Colors.black.withOpacity(0.5),
     fontSize: 13,
   );
+  //data bet
+  static TextStyle get betsDate =>  const TextStyle(
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.orangeHD,
+    fontSize: 13.4,
+  );
 }
