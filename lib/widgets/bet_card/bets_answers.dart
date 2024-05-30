@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
-
+import '../../style/color_style.dart';
 class AnswerContainer extends StatelessWidget {
   final String answer;
   final Color color;
@@ -29,16 +31,19 @@ class AnswerContainer extends StatelessWidget {
         child: Container(
           height: 40,
           decoration: BoxDecoration(
-            color: selectedAnswer == answer ? color.withOpacity(1) : color.withOpacity(0.4),
+            color: selectedAnswer == answer ? color : color.withOpacity(0.3),
             borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: ColorsBets.orangeHD, width: 1.5),
           ),
           child: Center(
-            child: Text(
+            child: AutoSizeText(
               answer,
+              minFontSize: 12,
+              maxFontSize: 20,
               textAlign: TextAlign.center,
               style: selectedAnswer == answer
-                  ? const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-                  : TextStyle(color: Colors.black.withOpacity(0.8)),
+                  ? TextStyleBets.selectedAnswer
+                  : TextStyle(color: ColorsBets.blackHD.withOpacity(0.8),fontSize: 18),
             ),
           ),
         ),
@@ -50,16 +55,19 @@ class AnswerContainer extends StatelessWidget {
           child: Container(
             height: 40,
             decoration: BoxDecoration(
-              color: selectedAnswer == answer ? color.withOpacity(1) : color.withOpacity(0.4),
+              color: selectedAnswer == answer ? color : color.withOpacity(0.3),
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: ColorsBets.orangeHD, width: 1.5),
             ),
             child: Center(
-              child: Text(
+              child: AutoSizeText(
                 answer,
+                minFontSize: 12,
+                maxFontSize: 20,
                 textAlign: TextAlign.center,
                 style: selectedAnswer == answer
-                    ? const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-                    : TextStyle(color: Colors.black.withOpacity(0.8)),
+                    ?  TextStyleBets.selectedAnswer
+                    : TextStyle(color: ColorsBets.blackHD.withOpacity(0.8),fontSize: 18),
               ),
             ),
           ),

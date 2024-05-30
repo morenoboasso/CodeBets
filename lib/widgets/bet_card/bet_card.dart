@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import '../../services/db_service.dart';
 import '../../widgets/bet_card/bets_answers.dart';
 import '../../widgets/dialog/terminate_bet_dialog.dart';
+import '../buttons/answer_confirm_button.dart';
 class BetCard extends StatefulWidget {
   final Bet bet;
 
@@ -124,7 +125,7 @@ class _BetCardState extends State<BetCard> {
                   const SizedBox(width: 20),
                   AnswerContainer(
                     answer: widget.bet.answer1,
-                    color: Colors.orangeAccent,
+                    color: ColorsBets.orangeHD,
                     selectedAnswer: selectedAnswer,
                     isAnswerConfirmed: isAnwerConfirmed,
                     onTap: () => selectAnswer(widget.bet.answer1),
@@ -132,7 +133,7 @@ class _BetCardState extends State<BetCard> {
                   const SizedBox(width: 20),
                   AnswerContainer(
                     answer: widget.bet.answer2,
-                    color: Colors.orangeAccent,
+                    color: ColorsBets.orangeHD,
                     selectedAnswer: selectedAnswer,
                     isAnswerConfirmed: isAnwerConfirmed,
                     onTap: () => selectAnswer(widget.bet.answer2),
@@ -147,7 +148,7 @@ class _BetCardState extends State<BetCard> {
                   const SizedBox(width: 20),
                   AnswerContainer(
                     answer: widget.bet.answer3,
-                    color: Colors.orangeAccent,
+                    color: ColorsBets.orangeHD,
                     selectedAnswer: selectedAnswer,
                     isAnswerConfirmed: isAnwerConfirmed,
                     onTap: () => selectAnswer(widget.bet.answer3),
@@ -155,7 +156,7 @@ class _BetCardState extends State<BetCard> {
                   const SizedBox(width: 20),
                   AnswerContainer(
                     answer: widget.bet.answer4,
-                    color: Colors.orangeAccent,
+                    color: ColorsBets.orangeHD,
                     selectedAnswer: selectedAnswer,
                     isAnswerConfirmed: isAnwerConfirmed,
                     onTap: () => selectAnswer(widget.bet.answer4),
@@ -165,18 +166,19 @@ class _BetCardState extends State<BetCard> {
               ),
             ],
           ),
+          const SizedBox(height: 20),
 
           // Confirm button
           if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
               !isAnwerConfirmed)
-            ElevatedButton(
+            ConfirmButton(
               onPressed: () {
                 setState(() {
                   isAnwerConfirmed = true;
                 });
                 confirmSelection();
               },
-              child: const Text('Conferma'),
+              isEnabled: true,
             ),
 
           const SizedBox(height: 20),

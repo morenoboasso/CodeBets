@@ -62,4 +62,12 @@ class TextStyleBets {
     fontWeight: FontWeight.bold,
     color: ColorsBets.blueHD,
   );
+
+  //bet answers
+//selected answer text
+static TextStyle get selectedAnswer => const TextStyle(
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.whiteHD,
+  fontSize: 18
+);
 }
