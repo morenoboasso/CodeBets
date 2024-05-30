@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codebets/models/bet.dart';
+import 'package:codebets/style/color_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import '../services/db_service.dart';
@@ -24,7 +25,7 @@ class _BetCardState extends State<BetCard> {
     _loadUserAnswer();
     _checkAnswerConfirmation();
   }
-//controlla se lìutente ha gia selezionato una risposta
+//controlla se l'utente ha gia selezionato una risposta
   Future<void> _checkAnswerConfirmation() async {
     String? userName = GetStorage().read<String>('userName');
     String betId = widget.bet.id;
@@ -75,6 +76,11 @@ class _BetCardState extends State<BetCard> {
 
     return
       Card(
+        surfaceTintColor: ColorsBets.whiteHD,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: const BorderSide(color: ColorsBets.blueHD,width: 2),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
