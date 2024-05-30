@@ -47,4 +47,12 @@ class TextStyleBets {
     fontWeight: FontWeight.bold,
     color: ColorsBets.blueHD,
   );
+
+  //bets attive
+//titolo
+  static TextStyle get activeBetTitle => const TextStyle(
+    fontSize: 25,
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.blackHD,
+  );
 }

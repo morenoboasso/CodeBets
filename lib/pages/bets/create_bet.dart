@@ -101,11 +101,13 @@ class _CreateBetPageState extends State<CreateBetPage> {
                         });
                       },
                     ),
+                    const SizedBox(height: 10),
                     BetDescriptionFormField(
                       onChanged: (value) {
                         _description = value;
                       },
                     ),
+                    const SizedBox(height: 20),
                     BetAnswerFormField(
                       labelText: 'Risposta 1*',
                       hintText: "Es. Sì",

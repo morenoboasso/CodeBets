@@ -1,3 +1,4 @@
+import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
 import '../../models/bet.dart';
 import '../../services/db_service.dart';
@@ -14,35 +15,32 @@ class ActiveBetsPage extends StatefulWidget {
 class _ActiveBetsPageState extends State<ActiveBetsPage> {
   List<Bet> _betList = [];
   bool _isLoading = true;
-  late Stream<List<Bet>> _betsStream; // Aggiunta dello stream
+  late Stream<List<Bet>> _betsStream;
 
   @override
   void initState() {
     super.initState();
-    _betsStream = DbService().betsStream; // Inizializzazione dello stream
-    _loadBets(); // Caricamento iniziale delle scommesse
+    _betsStream = DbService().betsStream;
+    _loadBets();
   }
 
-  // Load bets from the database and apply user filter
   Future<void> _loadBets() async {
     String? storedUserName = GetStorage().read<String>('userName');
-    await for (List<Bet> snapshot in _betsStream) { // Ascolta gli aggiornamenti dello stream
+    await for (List<Bet> snapshot in _betsStream) {
       setState(() {
-        _isLoading = true; // Mostra lo spinner di caricamento
+        _isLoading = true;
       });
-      // Aggiorna la lista locale delle scommesse con quella ottenuta dallo stream
       _betList = snapshot;
-      // Applica il filtro in base all'utente memorizzato
       if (storedUserName != null) {
-        _betList = _betList.where((bet) => bet.target != storedUserName).toList();
+        _betList =
+            _betList.where((bet) => bet.target != storedUserName).toList();
       }
       setState(() {
-        _isLoading = false; // Nasconde lo spinner di caricamento
+        _isLoading = false;
       });
     }
   }
 
-  // Widget per mostrare un messaggio quando non ci sono scommesse
   Widget _noBets() {
     return const Center(
       child: Column(
@@ -60,51 +58,79 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Scommesse Attive'),
-      ),
-      body: _isLoading
-          ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Caricamento..."),
-            const SizedBox(height: 20),
-            CircularProgressIndicator(
-              backgroundColor: Colors.orangeAccent,
-              color: Colors.orange.withOpacity(0.7),
-            ),
-          ],
-        ),
-      )
-          : _betList.isEmpty
-          ? _noBets() // Mostra il messaggio quando non ci sono scommesse
-          : CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return Padding(
-                    padding:
-                    const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: BetCard(
-                          bet: _betList[index],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                childCount: _betList.length,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/bg.png"),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                 Text(
+                  "Scommesse Attive",
+                  style: TextStyleBets.activeBetTitle,
+                ),
+                Expanded(
+                  child: Container(
+                    child: _isLoading
+                        ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Caricamento..."),
+                          const SizedBox(height: 20),
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.orangeAccent,
+                            color: Colors.orange.withOpacity(0.7),
+                          ),
+                        ],
+                      ),
+                    )
+                        : _betList.isEmpty
+                        ? _noBets()
+                        : CustomScrollView(
+                      slivers: [
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    20, 10, 20, 20),
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                    ),
+                                    child: BetCard(
+                                      bet: _betList[index],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            childCount: _betList.length,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
