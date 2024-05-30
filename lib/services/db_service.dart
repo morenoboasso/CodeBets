@@ -227,10 +227,36 @@ class DbService {
           .doc(betId)
           .delete();
 
-      print('Punteggi aggiornati e risposte cancellate correttamente!');
+      debugPrint('Punteggi aggiornati e risposte cancellate correttamente!');
     } catch (e) {
-      print(
+      debugPrint(
           "Errore durante l'aggiornamento dei punteggi degli utenti o la cancellazione delle risposte: $e");
     }
   }
+
+  // Elimina una scommessa
+  Future<void> deleteBet(String betId) async {
+    try {
+      // Cancella le risposte associate alla scommessa
+      await FirebaseFirestore.instance
+          .collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .get()
+          .then((querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+
+      // Cancella la scommessa stessa
+      await FirebaseFirestore.instance.collection('scommesse')
+          .doc(betId)
+          .delete();
+
+      debugPrint('Scommessa eliminata correttamente!');
+    } catch (e) {
+      debugPrint("Errore durante l'eliminazione della scommessa: $e");
+    }
+  }
+
 }

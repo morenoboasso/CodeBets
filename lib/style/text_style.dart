@@ -55,4 +55,11 @@ class TextStyleBets {
     fontWeight: FontWeight.bold,
     color: ColorsBets.blackHD,
   );
+
+  //dialog termina bet
+  static TextStyle get dialogTitle => const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.blueHD,
+  );
 }
