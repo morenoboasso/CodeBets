@@ -1,7 +1,7 @@
 import 'package:codebets/routes.dart';
 import 'package:codebets/style/color_style.dart';
 import 'package:codebets/style/text_style.dart';
-import 'package:codebets/widgets/input_forms_dropdown/login_input.dart';
+import 'package:codebets/widgets/login/login_input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';

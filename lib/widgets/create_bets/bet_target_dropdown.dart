@@ -72,6 +72,7 @@ class BetTargetDropdownFormField extends StatelessWidget {
                       CircleAvatar(
                         backgroundImage: NetworkImage(user['pfp']!),
                         radius: 12,
+                        backgroundColor: ColorsBets.whiteHD,
                       ),
                       const SizedBox(width: 8),
                       Text(user['name']!),

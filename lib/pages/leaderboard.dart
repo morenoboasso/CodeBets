@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/db_service.dart';
-import '../widgets/user_stats.dart';
+import '../widgets/leaderboard/other_user_stats_dialog.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});

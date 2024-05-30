@@ -1,11 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:codebets/models/bet.dart';
 import 'package:codebets/style/color_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../services/db_service.dart';
-import '../../widgets/bet_card/bets_answers.dart';
-import '../../widgets/dialog/terminate_bet_dialog.dart';
-import '../buttons/answer_confirm_button.dart';
+import '../../style/text_style.dart';
+import '../../widgets/bet_card/bets_answers_shape.dart';
+import '../terminate_bet_dialog/terminate_bet_dialog.dart';
+import 'answer_confirm_button.dart';
 class BetCard extends StatefulWidget {
   final Bet bet;
   const BetCard({super.key, required this.bet});
@@ -16,12 +18,14 @@ class _BetCardState extends State<BetCard> {
   String? selectedAnswer;
   DbService dbService = DbService();
   bool isAnwerConfirmed = false;
+  List<Map<String, String>> _usersList = [];
 
   @override
   void initState() {
     super.initState();
     _loadUserAnswer();
     _checkAnswerConfirmation();
+    _loadUsers();
   }
 
 // Metodo per verificare la conferma della risposta dell'utente
@@ -42,13 +46,24 @@ class _BetCardState extends State<BetCard> {
       selectedAnswer = answer;
     });
   }
+  Future<void> _loadUsers() async {
+    List<Map<String, String>> usersList = await dbService.getUsersListWithAvatars();
+    setState(() {
+      _usersList = usersList;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     // Check if the user is the creator of the bet
     String? storedUserName = GetStorage().read<String>('userName');
     bool isCreator = widget.bet.creator == storedUserName;
-
+// Find target data
+    String targetName = widget.bet.target;
+    String? targetAvatar = _usersList.isNotEmpty
+        ? _usersList.firstWhere((user) => user['name'] == targetName, orElse: () => {'pfp': ''})['pfp']
+        : '';
     return Card(
       surfaceTintColor: ColorsBets.whiteHD,
       shape: RoundedRectangleBorder(
@@ -60,31 +75,52 @@ class _BetCardState extends State<BetCard> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 10),
-          Text(
+          AutoSizeText(
             widget.bet.title,
+            minFontSize: 14,
+            maxFontSize: 20,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyleBets.betsTitle
           ),
           const SizedBox(height: 10),
           // Description
           if (widget.bet.description.isNotEmpty)
-            Text(
+            AutoSizeText(
               widget.bet.description,
+              minFontSize: 13,
+              maxFontSize: 20,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.w300),
+              style: TextStyleBets.betsDescription ,
             ),
-          const SizedBox(height: 10),
+          if (widget.bet.description.isNotEmpty)
+            const SizedBox(height: 10),
 
           // Target
           if (widget.bet.target.isNotEmpty)
-            Text(
-              'Target: ${widget.bet.target}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          // Target's avatar and name
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Target: ',
+                    style: TextStyle(fontSize: 14,color: ColorsBets.blackHD, fontWeight: FontWeight.bold),
+                  ),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(targetAvatar ?? ''),
+                    radius: 15,
+                    backgroundColor: ColorsBets.whiteHD,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    targetName,
+                    style: const TextStyle(fontSize: 15,color: ColorsBets.blackHD, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
+          if (widget.bet.target.isNotEmpty)
           const SizedBox(height: 15),
           // Answers
           Column(

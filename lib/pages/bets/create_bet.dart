@@ -4,11 +4,12 @@ import '../../services/db_service.dart';
 import '../../services/submit_bet.dart';
 import '../../style/color_style.dart';
 import '../../style/text_style.dart';
+import '../../widgets/create_bets/bet_descr_input.dart';
+import '../../widgets/create_bets/bet_risposte_input.dart';
+import '../../widgets/create_bets/bet_target_dropdown.dart';
+import '../../widgets/create_bets/bet_title_input.dart';
 import '../../widgets/debug_only/clear_bets.dart';
-import '../../widgets/input_forms_dropdown/bet_descr_input.dart';
-import '../../widgets/input_forms_dropdown/bet_risposte_input.dart';
-import '../../widgets/input_forms_dropdown/bet_target_dropdown.dart';
-import '../../widgets/input_forms_dropdown/bet_title_input.dart';
+
 class CreateBetPage extends StatefulWidget {
   const CreateBetPage({super.key});
 

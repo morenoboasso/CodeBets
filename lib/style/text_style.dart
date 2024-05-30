@@ -70,4 +70,17 @@ static TextStyle get selectedAnswer => const TextStyle(
     color: ColorsBets.whiteHD,
   fontSize: 18
 );
+
+//bet title
+  static TextStyle get betsTitle => const TextStyle(
+    fontSize: 20,
+    color: ColorsBets.blueHD,
+    fontWeight: FontWeight.bold,
+  );
+  //bet description
+  static TextStyle get betsDescription =>  TextStyle(
+    fontWeight: FontWeight.bold,
+    color: Colors.black.withOpacity(0.5),
+    fontSize: 13,
+  );
 }
