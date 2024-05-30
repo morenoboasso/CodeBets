@@ -31,9 +31,9 @@ class AnswerContainer extends StatelessWidget {
         child: Container(
           height: 40,
           decoration: BoxDecoration(
-            color: selectedAnswer == answer ? color : color.withOpacity(0.3),
+            color: selectedAnswer == answer ? color : color.withOpacity(0.2),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: ColorsBets.orangeHD, width: 1.5),
+            border: Border.all(color: ColorsBets.orangeHD.withOpacity(0.5), width: 1.5),
           ),
           child: Center(
             child: AutoSizeText(
@@ -43,7 +43,7 @@ class AnswerContainer extends StatelessWidget {
               textAlign: TextAlign.center,
               style: selectedAnswer == answer
                   ? TextStyleBets.selectedAnswer
-                  : TextStyle(color: ColorsBets.blackHD.withOpacity(0.8),fontSize: 18),
+                  : TextStyle(fontWeight: FontWeight.bold,color: ColorsBets.blackHD.withOpacity(0.4),fontSize: 17),
             ),
           ),
         ),
@@ -55,9 +55,9 @@ class AnswerContainer extends StatelessWidget {
           child: Container(
             height: 40,
             decoration: BoxDecoration(
-              color: selectedAnswer == answer ? color : color.withOpacity(0.3),
+              color: selectedAnswer == answer ? color : color.withOpacity(0.2),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: ColorsBets.orangeHD, width: 1.5),
+              border: Border.all(color: ColorsBets.orangeHD.withOpacity(0.5), width: 2),
             ),
             child: Center(
               child: AutoSizeText(
@@ -67,7 +67,7 @@ class AnswerContainer extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: selectedAnswer == answer
                     ?  TextStyleBets.selectedAnswer
-                    : TextStyle(color: ColorsBets.blackHD.withOpacity(0.8),fontSize: 18),
+                    : TextStyle(fontWeight: FontWeight.bold,color: ColorsBets.blackHD.withOpacity(0.4),fontSize: 17),
               ),
             ),
           ),

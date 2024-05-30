@@ -23,7 +23,7 @@ class BetTarget extends StatelessWidget {
             radius: 15,
             backgroundColor: ColorsBets.whiteHD,
           ),
-          const SizedBox(width: 2),
+          const SizedBox(width: 3),
           Text(
             targetName,
             style: const TextStyle(fontSize: 15,color: ColorsBets.blackHD, fontWeight: FontWeight.bold),

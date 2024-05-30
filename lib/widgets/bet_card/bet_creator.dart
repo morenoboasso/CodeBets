@@ -19,7 +19,7 @@ class BetCreator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Creata da: ',
+            'Creata: ',
             style: TextStyle(fontSize: 14, color: ColorsBets.blueHD, fontWeight: FontWeight.bold),
           ),
           CircleAvatar(
@@ -29,7 +29,7 @@ class BetCreator extends StatelessWidget {
             radius: 15,
             backgroundColor: ColorsBets.whiteHD,
           ),
-          const SizedBox(width: 2),
+          const SizedBox(width: 3),
           Text(
             creatorName,
             style: const TextStyle(fontSize: 15, color: ColorsBets.blueHD, fontWeight: FontWeight.bold),

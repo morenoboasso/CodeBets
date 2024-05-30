@@ -13,7 +13,7 @@ class BetDescription extends StatelessWidget {
       description,
       minFontSize: 13,
       maxFontSize: 20,
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.justify,
       style: TextStyleBets.betsDescription,
     );
   }

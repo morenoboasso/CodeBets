@@ -71,6 +71,12 @@ static TextStyle get selectedAnswer => const TextStyle(
   fontSize: 18
 );
 
+  static TextStyle get betScegliAnswer => const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.blueHD,
+  );
+
 //bet title
   static TextStyle get betsTitle => const TextStyle(
     fontSize: 20,
@@ -87,6 +93,6 @@ static TextStyle get selectedAnswer => const TextStyle(
   static TextStyle get betsDate =>  const TextStyle(
     fontWeight: FontWeight.bold,
     color: ColorsBets.orangeHD,
-    fontSize: 13.4,
+    fontSize: 10,
   );
 }

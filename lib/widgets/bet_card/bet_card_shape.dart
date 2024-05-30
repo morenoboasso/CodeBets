@@ -42,6 +42,7 @@ class _BetCardState extends State<BetCard> {
       isAnwerConfirmed = confirmed;
     });
   }
+
   // Metodo per caricare la risposta dell'utente
   Future<void> _loadUserAnswer() async {
     String betId = widget.bet.id;
@@ -50,16 +51,18 @@ class _BetCardState extends State<BetCard> {
       selectedAnswer = userAnswer;
     });
   }
+
   // Selezione risposta
   void selectAnswer(String answer) {
     setState(() {
       selectedAnswer = answer;
     });
   }
+
   // Caricamento degli utenti
   Future<void> _loadUsers() async {
     List<Map<String, String>> usersList =
-    await dbService.getUsersListWithAvatars();
+        await dbService.getUsersListWithAvatars();
     setState(() {
       _usersList = usersList;
     });
@@ -73,95 +76,99 @@ class _BetCardState extends State<BetCard> {
     // Find target data
     String targetName = widget.bet.target;
     String? targetAvatar = _usersList.isNotEmpty
-        ? _usersList
-        .firstWhere((user) => user['name'] == targetName)['pfp']
-        : '';
+        ? _usersList.firstWhere((user) => user['name'] == targetName,
+            orElse: () => {'pfp': 'default_avatar'})['pfp']
+        : 'default_avatar';
     String? creatorAvatar = _usersList.isNotEmpty
-        ? _usersList
-        .firstWhere((user) => user['name'] == widget.bet.creator)['pfp']
-        : '';
+        ? _usersList.firstWhere((user) => user['name'] == widget.bet.creator,
+            orElse: () => {'pfp': 'default_avatar'})['pfp']
+        : 'default_avatar';
+
     return Card(
       surfaceTintColor: ColorsBets.whiteHD,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: const BorderSide(color: ColorsBets.blueHD, width: 2),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 10),
-          // Titolo
-          BetTitle(title: widget.bet.title),
-          const SizedBox(height: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Titolo scommessa
+            BetTitle(title: widget.bet.title),
 
-          // Descrizione
-          if (widget.bet.description.isNotEmpty)
-            BetDescription(description: widget.bet.description),
-          if (widget.bet.description.isNotEmpty)
-            const SizedBox(height: 10),
+            // Descrizione scommessa
+            if (widget.bet.description.isNotEmpty)
+              BetDescription(description: widget.bet.description),
 
-          // Target
-          if (widget.bet.target.isNotEmpty)
-            BetTarget(targetName: targetName, targetAvatar: targetAvatar!),
-          if (widget.bet.target.isNotEmpty)
-            const SizedBox(height: 10),
+            // Target scommessa
+            if (widget.bet.target.isNotEmpty)
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                BetTarget(targetName: targetName, targetAvatar: targetAvatar!),
+              ]),
 
-          // Risposte
-          BetAnswers(
-            bet: widget.bet,
-            selectedAnswer: selectedAnswer,
-            isAnswerConfirmed: isAnwerConfirmed,
-            onTap: selectAnswer,
-          ),
-
-          if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
-              !isAnwerConfirmed)
-          const SizedBox(height: 20),
-          // Confirm button
-          if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
-              !isAnwerConfirmed)
-            ConfirmButton(
-              onPressed: () {
-                setState(() {
-                  isAnwerConfirmed = true;
-                });
-                dbService.confirmSelection(widget.bet.id, selectedAnswer!);
-              },
-              isEnabled: true,
-            ),
-          if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
-              !isAnwerConfirmed)
-          const SizedBox(height: 20),
-
-              //creatore bet
+            //creatore bet
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               BetCreator(
                 creatorName: widget.bet.creator,
                 creatorAvatar: creatorAvatar,
               ),
+            ]),
+            const SizedBox(height:20),
+            // Risposte
+            BetAnswers(
+              bet: widget.bet,
+              selectedAnswer: selectedAnswer,
+              isAnswerConfirmed: isAnwerConfirmed,
+              onTap: selectAnswer,
+            ),
 
-              //data
-              Text(
-                  widget.bet.creationDate,
-                style: TextStyleBets.betsDate,
+            if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
+                !isAnwerConfirmed)
+              const SizedBox(height: 15),
+            // Conferma risposta bet
+            if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
+                !isAnwerConfirmed)
+              ConfirmButton(
+                onPressed: () {
+                  setState(() {
+                    isAnwerConfirmed = true;
+                  });
+                  dbService.confirmSelection(widget.bet.id, selectedAnswer!);
+                },
+                isEnabled: true,
               ),
 
-          const SizedBox(height: 5),
-          // Terminate bet button
-          if (isCreator)
-            TerminateButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DialogTerminateBet(bet: widget.bet);
-                  },
-                );
-              },
-              isEnabled: true,
+
+            // Terminate bet button
+            if (isCreator)
+            const SizedBox(height: 10),
+            if (isCreator)
+              TerminateButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogTerminateBet(bet: widget.bet);
+                    },
+                  );
+                },
+                isEnabled: true,
+              ),
+
+            //data della scommessa
+            const SizedBox(height: 5),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                widget.bet.creationDate,
+                style: TextStyleBets.betsDate,
+              ),
             ),
-          const SizedBox(height: 10),
-        ],
+          ],
+        ),
       ),
     );
   }
