@@ -3,7 +3,7 @@ import 'package:codebets/style/text_style.dart';
 import '../../style/color_style.dart';
 
 class BetTargetDropdownFormField extends StatelessWidget {
-  final List<String> usersList;
+  final List<Map<String, String>> usersList;
   final String? selectedUser;
   final ValueChanged<String?> onChanged;
 
@@ -27,15 +27,15 @@ class BetTargetDropdownFormField extends StatelessWidget {
               style: TextStyleBets.inputTextTitle,
             ),
             IconButton(
-              icon: const Icon(Icons.info_outline,size: 24,),
+              icon: const Icon(Icons.info_outline, size: 24,),
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text("Cos'è il target?",textAlign: TextAlign.center,),
+                      title: const Text("Cos'è il target?", textAlign: TextAlign.center,),
                       content: const Text(
-                          'Il target è la persona che sarà al centro della scommessa.\nQuesta persona non verrà informata della scommessa, ma alla fine otterrà 2 punti.',
+                        'Il target è la persona che sarà al centro della scommessa.\nQuesta persona non verrà informata della scommessa, ma alla fine otterrà 2 punti.',
                         textAlign: TextAlign.center,),
                       actions: <Widget>[
                         TextButton(
@@ -64,10 +64,19 @@ class BetTargetDropdownFormField extends StatelessWidget {
                 value: null,
                 child: Text('Nessun target'),
               ),
-              ...usersList.where((user) => user != 'Admin').map((String user) {
+              ...usersList.map((Map<String, String> user) {
                 return DropdownMenuItem<String>(
-                  value: user,
-                  child: Text(user),
+                  value: user['name'],
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(user['pfp']!),
+                        radius: 12,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(user['name']!),
+                    ],
+                  ),
                 );
               }),
             ],

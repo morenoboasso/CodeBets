@@ -1,15 +1,14 @@
-import 'package:codebets/style/text_style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../services/db_service.dart';
 import '../../services/submit_bet.dart';
 import '../../style/color_style.dart';
+import '../../style/text_style.dart';
 import '../../widgets/debug_only/clear_bets.dart';
 import '../../widgets/input_forms_dropdown/bet_descr_input.dart';
 import '../../widgets/input_forms_dropdown/bet_risposte_input.dart';
 import '../../widgets/input_forms_dropdown/bet_target_dropdown.dart';
 import '../../widgets/input_forms_dropdown/bet_title_input.dart';
-
 class CreateBetPage extends StatefulWidget {
   const CreateBetPage({super.key});
 
@@ -26,7 +25,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
   String _answer3 = '';
   String _answer4 = '';
   String? _selectedUser;
-  List<String> _usersList = [];
+  List<Map<String, String>> _usersList = [];
   DbService dbService = DbService();
 
   @override
@@ -36,7 +35,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
   }
 
   Future<void> _loadUsers() async {
-    List<String> usersList = await dbService.getUsersList();
+    List<Map<String, String>> usersList = await dbService.getUsersListWithAvatars();
     setState(() {
       _usersList = usersList;
     });
