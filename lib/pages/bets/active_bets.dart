@@ -2,7 +2,7 @@ import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
 import '../../models/bet.dart';
 import '../../services/db_service.dart';
-import '../../widgets/bet_card.dart';
+import '../../widgets/bet_card/bet_card.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ActiveBetsPage extends StatefulWidget {
