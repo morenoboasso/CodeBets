@@ -1,3 +1,4 @@
+import 'package:codebets/style/color_style.dart';
 import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
 import '../../models/bet.dart';
@@ -42,13 +43,22 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
   }
 
   Widget _noBets() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Nessuna scommessa al momento"),
-          SizedBox(
-            height: 10,
+          const Text("Nessuna scommessa al momento"),
+          const SizedBox(height: 10),
+          ClipOval(
+            child: Container(
+              width: 50,
+              height: 50,
+              color: ColorsBets.whiteHD,
+              child: Image.asset(
+                "assets/error.gif",
+                fit: BoxFit.fill,
+            ),
+          ),
           ),
         ],
       ),
