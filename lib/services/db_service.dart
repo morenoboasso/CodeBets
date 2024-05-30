@@ -167,4 +167,70 @@ class DbService {
         .snapshots()
         .map((snapshot) => snapshot.data() ?? {});
   }
+
+  //update scores
+  Future<void> checkAndUpdateScores(String selectedAnswer, String betId, String target) async {
+    try {
+      // Ottieni e aggiorna i punteggi degli utenti
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .get();
+
+      for (var doc in querySnapshot.docs) {
+        String user = doc['utente'];
+        String answer = doc['risposta_scelta'];
+
+        if (user == target) {
+          await FirebaseFirestore.instance.collection('users').doc(user).update(
+              {
+                'score': FieldValue.increment(2),
+              });
+        }
+
+        // Verifica se l'utente ha selezionato una risposta
+        if (answer.isNotEmpty) {
+          // Controlla se la risposta dell'utente è corretta
+          if (answer == selectedAnswer) {
+            // Se la risposta è corretta, aumenta il punteggio e il numero di scommesse vinte
+            await FirebaseFirestore.instance.collection('users')
+                .doc(user)
+                .update({
+              'score': FieldValue.increment(5),
+              // Aumenta punteggio per chi vince
+              'scommesse_vinte': FieldValue.increment(1),
+            });
+          } else {
+            // Se la risposta è sbagliata, incrementa solo il numero di scommesse perse
+            await FirebaseFirestore.instance.collection('users')
+                .doc(user)
+                .update({
+              'scommesse_perse': FieldValue.increment(1),
+            });
+          }
+        }
+      }
+
+      // Cancella le risposte associate alla scommessa
+      await FirebaseFirestore.instance
+          .collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .get()
+          .then((querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+
+      // Cancella la scommessa stessa
+      await FirebaseFirestore.instance.collection('scommesse')
+          .doc(betId)
+          .delete();
+
+      print('Punteggi aggiornati e risposte cancellate correttamente!');
+    } catch (e) {
+      print(
+          "Errore durante l'aggiornamento dei punteggi degli utenti o la cancellazione delle risposte: $e");
+    }
+  }
 }
