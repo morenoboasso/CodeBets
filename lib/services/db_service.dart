@@ -259,4 +259,46 @@ class DbService {
     }
   }
 
+  //invio risposta scelta dall'utente
+  Future<void> confirmSelection(String betId, String selectedAnswer) async {
+    try {
+      if (selectedAnswer != null) {
+        String? userName = GetStorage().read<String>('userName');
+
+        // Invia la risposta al database
+        await updateAnswer(betId, userName!, selectedAnswer);
+
+        debugPrint('Risposta inviata al database con successo!');
+      } else {
+        debugPrint('Seleziona una risposta prima di confermare!');
+      }
+    } catch (e) {
+      debugPrint("Errore durante la conferma della selezione: $e");
+    }
+  }
+
+  // Carica la risposta dell'utente per una scommessa
+  Future<String?> loadUserAnswer(String betId) async {
+    try {
+      String? userName = GetStorage().read<String>('userName');
+      String? userAnswer = await getUserAnswerForBet(betId, userName!);
+      return userAnswer;
+    } catch (e) {
+      debugPrint("Errore durante il caricamento della risposta dell'utente: $e");
+      return null;
+    }
+  }
+
+  // Controlla se l'utente ha già confermato la risposta per una scommessa
+  Future<bool> checkAnswerConfirmation(String betId) async {
+    try {
+      String? userName = GetStorage().read<String>('userName');
+      String? userAnswer = await getUserAnswerForBet(betId, userName!);
+      return userAnswer != null && userAnswer.isNotEmpty;
+    } catch (e) {
+      debugPrint("Errore durante il controllo della conferma della risposta: $e");
+      return false;
+    }
+  }
+
 }

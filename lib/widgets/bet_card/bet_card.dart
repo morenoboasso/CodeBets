@@ -8,13 +8,10 @@ import '../../widgets/dialog/terminate_bet_dialog.dart';
 import '../buttons/answer_confirm_button.dart';
 class BetCard extends StatefulWidget {
   final Bet bet;
-
   const BetCard({super.key, required this.bet});
-
   @override
   _BetCardState createState() => _BetCardState();
 }
-
 class _BetCardState extends State<BetCard> {
   String? selectedAnswer;
   DbService dbService = DbService();
@@ -27,48 +24,23 @@ class _BetCardState extends State<BetCard> {
     _checkAnswerConfirmation();
   }
 
-//controlla se l'utente ha gia selezionato una risposta
+// Metodo per verificare la conferma della risposta dell'utente
   Future<void> _checkAnswerConfirmation() async {
-    String? userName = GetStorage().read<String>('userName');
     String betId = widget.bet.id;
-    String? userAnswer = await dbService.getUserAnswerForBet(betId, userName!);
-    setState(() {
-      isAnwerConfirmed = userAnswer != null && userAnswer.isNotEmpty;
-    });
+    bool confirmed = await dbService.checkAnswerConfirmation(betId);
+    setState(() {isAnwerConfirmed = confirmed;});
   }
-
-// carica le risposte date
+// Metodo per caricare la risposta dell'utente
   Future<void> _loadUserAnswer() async {
-    String? userName = GetStorage().read<String>('userName');
     String betId = widget.bet.id;
-    String? userAnswer = await dbService.getUserAnswerForBet(betId, userName!);
-    setState(() {
-      selectedAnswer = userAnswer;
-    });
+    String? userAnswer = await dbService.loadUserAnswer(betId);
+    setState(() {selectedAnswer = userAnswer;});
   }
-
   //selezione risposta
   void selectAnswer(String answer) {
     setState(() {
       selectedAnswer = answer;
     });
-  }
-
-  //conferma selezione
-  void confirmSelection() async {
-    if (selectedAnswer != null) {
-      String? userName = GetStorage().read<String>('userName');
-
-      // Get the bet ID
-      String betId = widget.bet.id;
-
-      // Send the answer to the database
-      await dbService.updateAnswer(betId, userName!, selectedAnswer!);
-
-      debugPrint('Answer sent to the database successfully!');
-    } else {
-      debugPrint('Select an answer before confirming!');
-    }
   }
 
   @override
@@ -167,7 +139,6 @@ class _BetCardState extends State<BetCard> {
             ],
           ),
           const SizedBox(height: 20),
-
           // Confirm button
           if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
               !isAnwerConfirmed)
@@ -176,11 +147,10 @@ class _BetCardState extends State<BetCard> {
                 setState(() {
                   isAnwerConfirmed = true;
                 });
-                confirmSelection();
+                dbService.confirmSelection(widget.bet.id, selectedAnswer!);
               },
               isEnabled: true,
             ),
-
           const SizedBox(height: 20),
           // Creator and date
           Row(
