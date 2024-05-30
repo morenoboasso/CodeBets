@@ -116,7 +116,7 @@ class _BetCardState extends State<BetCard> {
                 creatorAvatar: creatorAvatar,
               ),
             ]),
-            const SizedBox(height:20),
+            const SizedBox(height:15),
             // Risposte
             BetAnswers(
               bet: widget.bet,

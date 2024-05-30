@@ -47,7 +47,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("Nessuna scommessa al momento"),
+           const Text("Nessuna scommessa al momento",style: TextStyle(color: ColorsBets.blueHD)),
           const SizedBox(height: 10),
           ClipOval(
             child: Container(
