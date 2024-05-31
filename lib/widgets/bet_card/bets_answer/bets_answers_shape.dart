@@ -43,23 +43,20 @@ class AnswerContainer extends StatelessWidget {
           height: 40,
           decoration: boxDecoration,
           child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AutoSizeText(
-                  answer,
-                  minFontSize: 12,
-                  maxFontSize: 20,
-                  textAlign: TextAlign.center,
-                  style: selectedAnswer == answer
-                      ? TextStyleBets.selectedAnswer
-                      : TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: ColorsBets.blackHD.withOpacity(0.4),
-                    fontSize: 17,
-                  ),
-                ),
-              ],
+            child: AutoSizeText(
+              answer,
+              minFontSize: 10,
+              maxFontSize: 20,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: selectedAnswer == answer
+                  ? TextStyleBets.selectedAnswer
+                  : TextStyle(
+                fontWeight: FontWeight.bold,
+                color: ColorsBets.blackHD.withOpacity(0.4),
+                fontSize: 17,
+              ),
             ),
           ),
         ),

@@ -144,26 +144,56 @@ class _CreateBetPageState extends State<CreateBetPage> {
                             },
                           ),
                           if (_showThirdAnswer)
-                            BetAnswerFormField(
-                              labelText: 'Risposta 3',
-                              hintText: "Es. Yes",
-                              onSaved: (newValue) {
-                                _answer3 = newValue ?? '';
-                              },
-                              validator: (value) {
-                                return null;
-                              },
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BetAnswerFormField(
+                                    labelText: 'Risposta 3',
+                                    hintText: "Es. Yes",
+                                    onSaved: (newValue) {
+                                      _answer3 = newValue ?? '';
+                                    },
+                                    validator: (value) {
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.remove_circle, color: ColorsBets.blueHD),
+                                  onPressed: () {
+                                    setState(() {
+                                      _showThirdAnswer = false;
+                                      _answer3 = '';
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           if (_showFourthAnswer)
-                            BetAnswerFormField(
-                              labelText: 'Risposta 4',
-                              hintText: "Es. Nope",
-                              onSaved: (newValue) {
-                                _answer4 = newValue ?? '';
-                              },
-                              validator: (value) {
-                                return null;
-                              },
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BetAnswerFormField(
+                                    labelText: 'Risposta 4',
+                                    hintText: "Es. Nope",
+                                    onSaved: (newValue) {
+                                      _answer4 = newValue ?? '';
+                                    },
+                                    validator: (value) {
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.remove_circle, color: ColorsBets.blueHD),
+                                  onPressed: () {
+                                    setState(() {
+                                      _showFourthAnswer = false;
+                                      _answer4 = '';
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           const SizedBox(height: 20),
                           if (!_showThirdAnswer || (_showThirdAnswer && !_showFourthAnswer))
@@ -182,12 +212,12 @@ class _CreateBetPageState extends State<CreateBetPage> {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     backgroundColor: Colors.white,
-                                    side: BorderSide(color: ColorsBets.blueHD, width: 2),
+                                    side: const BorderSide(color: ColorsBets.blueHD, width: 2),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: Text('Aggiungi altre risposte', style: TextStyle(color: ColorsBets.blueHD)),
+                                  child: const Text('Aggiungi altre risposte', style: TextStyle(color: ColorsBets.blueHD)),
                                 ),
                               ],
                             ),

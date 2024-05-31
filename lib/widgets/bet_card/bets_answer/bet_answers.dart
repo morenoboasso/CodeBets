@@ -22,8 +22,10 @@ class BetAnswers extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-         Text('Scegli una risposta:',
-        style: TextStyleBets.betScegliAnswer,),
+        Text(
+          'Scegli una risposta:',
+          style: TextStyleBets.betScegliAnswer,
+        ),
         const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -35,7 +37,7 @@ class BetAnswers extends StatelessWidget {
               isAnswerConfirmed: isAnswerConfirmed,
               onTap: () => onTap(bet.answer1),
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(width: 10),
             AnswerContainer(
               answer: bet.answer2,
               color: ColorsBets.orangeHD,
@@ -56,7 +58,7 @@ class BetAnswers extends StatelessWidget {
               isAnswerConfirmed: isAnswerConfirmed,
               onTap: () => onTap(bet.answer3),
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(width: 10),
             AnswerContainer(
               answer: bet.answer4,
               color: ColorsBets.orangeHD,
