@@ -37,7 +37,7 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       extendBody: true, // To make sure the body is drawn behind the bottom navigation bar
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.only(bottom: 10.0,left: 15,right: 15,top: 5),
         child: Container(
           decoration: BoxDecoration(
             color: ColorsBets.whiteHD,

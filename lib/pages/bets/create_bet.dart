@@ -61,161 +61,150 @@ class _CreateBetPageState extends State<CreateBetPage> {
             ),
           ),
           SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _submit();
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Text('Crea', style: TextStyleBets.betTextTitle),
-                              const SizedBox(width: 5),
-                              const Icon(Icons.arrow_forward, color: ColorsBets.blueHD),
-                            ],
-                          ),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            _submit();
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Text('Crea', style: TextStyleBets.betTextTitle),
+                            const SizedBox(width: 5),
+                            const Icon(Icons.arrow_forward, color: ColorsBets.blueHD),
+                          ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    BetTitleFormField(
-                      formKey: _formKey,
-                      onSaved: (newValue) {
-                        _title = newValue!;
-                      },
-                    ),
-                    BetTargetDropdownFormField(
-                      usersList: _usersList,
-                      selectedUser: _selectedUser,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedUser = newValue;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    BetDescriptionFormField(
-                      onChanged: (value) {
-                        _description = value;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 1*',
-                      hintText: "Es. Sì",
-                      onSaved: (newValue) {
-                        _answer1 = newValue!;
-                      },
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Inserisci la prima risposta';
-                        }
-                        return null;
-                      },
-                    ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 2*',
-                      hintText: "Es. No",
-                      onSaved: (newValue) {
-                        _answer2 = newValue!;
-                      },
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Inserisci la seconda risposta';
-                        }
-                        return null;
-                      },
-                    ),
-                    if (_showThirdAnswer)
-                      BetAnswerFormField(
-                        labelText: 'Risposta 3',
-                        hintText: "Es. Yes",
-                        onSaved: (newValue) {
-                          _answer3 = newValue ?? '';
-                        },
-                        validator: (value) {
-                          return null;
-                        },
                       ),
-                    if (_showFourthAnswer)
-                      BetAnswerFormField(
-                        labelText: 'Risposta 4',
-                        hintText: "Es. Nope",
-                        onSaved: (newValue) {
-                          _answer4 = newValue ?? '';
-                        },
-                        validator: (value) {
-                          return null;
-                        },
-                      ),
-                    const SizedBox(height: 20),
-                    if (!_showThirdAnswer || (_showThirdAnswer && !_showFourthAnswer))
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          OutlinedButton(
-                            onPressed: () {
+                          BetTitleFormField(
+                            formKey: _formKey,
+                            onSaved: (newValue) {
+                              _title = newValue!;
+                            },
+                          ),
+                          BetTargetDropdownFormField(
+                            usersList: _usersList,
+                            selectedUser: _selectedUser,
+                            onChanged: (newValue) {
                               setState(() {
-                                if (!_showThirdAnswer) {
-                                  _showThirdAnswer = true;
-                                } else {
-                                  _showFourthAnswer = true;
-                                }
+                                _selectedUser = newValue;
                               });
                             },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              side: BorderSide(color: ColorsBets.blueHD, width: 2),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                          ),
+                          const SizedBox(height: 10),
+                          BetDescriptionFormField(
+                            onChanged: (value) {
+                              _description = value;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          BetAnswerFormField(
+                            labelText: 'Risposta 1*',
+                            hintText: "Es. Sì",
+                            onSaved: (newValue) {
+                              _answer1 = newValue!;
+                            },
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Inserisci la prima risposta';
+                              }
+                              return null;
+                            },
+                          ),
+                          BetAnswerFormField(
+                            labelText: 'Risposta 2*',
+                            hintText: "Es. No",
+                            onSaved: (newValue) {
+                              _answer2 = newValue!;
+                            },
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Inserisci la seconda risposta';
+                              }
+                              return null;
+                            },
+                          ),
+                          if (_showThirdAnswer)
+                            BetAnswerFormField(
+                              labelText: 'Risposta 3',
+                              hintText: "Es. Yes",
+                              onSaved: (newValue) {
+                                _answer3 = newValue ?? '';
+                              },
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
+                          if (_showFourthAnswer)
+                            BetAnswerFormField(
+                              labelText: 'Risposta 4',
+                              hintText: "Es. Nope",
+                              onSaved: (newValue) {
+                                _answer4 = newValue ?? '';
+                              },
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
+                          const SizedBox(height: 20),
+                          if (!_showThirdAnswer || (_showThirdAnswer && !_showFourthAnswer))
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                OutlinedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (!_showThirdAnswer) {
+                                        _showThirdAnswer = true;
+                                      } else {
+                                        _showFourthAnswer = true;
+                                      }
+                                    });
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    side: BorderSide(color: ColorsBets.blueHD, width: 2),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Text('Aggiungi altre risposte', style: TextStyle(color: ColorsBets.blueHD)),
+                                ),
+                              ],
+                            ),
+                          const SizedBox(height: 20),
+                          if (kDebugMode)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Center(
+                                child: ClearButton(),
                               ),
                             ),
-                            child: Text('Aggiungi altre risposte', style: TextStyle(color: ColorsBets.blueHD)),
-                          ),
                         ],
                       ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _submit();
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Text('Crea', style: TextStyleBets.betTextTitle),
-                              const SizedBox(width: 5),
-                              const Icon(Icons.arrow_forward, color: ColorsBets.blueHD),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
-                    if (kDebugMode)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: Center(
-                          child: ClearButton(),
-                        ),
-                      ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
