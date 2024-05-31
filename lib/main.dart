@@ -150,6 +150,7 @@ class _LoginPageState extends State<LoginPage>
                               if (nameExists) {
                                 Get.offNamed(AppRoutes.mainScreen);
                                 GetStorage().write('userName', userName);
+                                FocusScope.of(context).unfocus();
                               } else {
                                 Vibration.vibrate(duration: 200, amplitude: 128);
                                 Get.snackbar(

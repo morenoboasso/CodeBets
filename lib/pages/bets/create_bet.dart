@@ -243,6 +243,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
   }
 
   Future<void> _submit() async {
+    FocusScope.of(context).unfocus();
     SubmitBetService submitBetService = SubmitBetService(
       context: context,
       title: _title,
