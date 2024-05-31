@@ -1,8 +1,10 @@
 import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
+
 import '../../models/bet.dart';
 import '../../services/db_service.dart';
 import '../../style/color_style.dart';
+
 
 class DialogTerminateBet extends StatefulWidget {
   final Bet bet;
@@ -19,6 +21,8 @@ class _DialogTerminateBetState extends State<DialogTerminateBet> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: ColorsBets.whiteHD,
+      surfaceTintColor: ColorsBets.whiteHD,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: const BorderSide(color: ColorsBets.blueHD, width: 3.5),

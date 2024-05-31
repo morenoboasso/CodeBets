@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:codebets/style/text_style.dart';
 import '../../style/color_style.dart';
@@ -33,16 +34,31 @@ class BetTargetDropdownFormField extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text("Cos'è il target?", textAlign: TextAlign.center,),
-                      content: const Text(
-                        'Il target è la persona che sarà al centro della scommessa.\nQuesta persona non verrà informata della scommessa, ma alla fine otterrà 2 punti.',
-                        textAlign: TextAlign.center,),
+                      backgroundColor: ColorsBets.whiteHD,
+                      surfaceTintColor: ColorsBets.whiteHD,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        side: BorderSide(color: ColorsBets.blueHD, width:3.0),
+                      ),
+                      title:  Text("Cos'è il 'Target' ?", textAlign: TextAlign.center,style: TextStyleBets.dialogTitle,),
+                      content: const AutoSizeText(
+                        'Il Target è la persona che sarà al centro della scommessa.\nQuesta persona non verrà informata della scommessa, ma alla fine otterrà 2 punti.',
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.justify,
+                        maxFontSize: 18,
+                        minFontSize: 12,
+                        maxLines: 5,
+                      ),
                       actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Chiudi'),
+                        //bottone chiudi dialog
+                        Center(
+                          child: _buildActionButton(
+                            label: 'Chiudi',
+                            color: Colors.red.withOpacity(0.8),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
                         ),
                       ],
                     );
@@ -112,6 +128,26 @@ class BetTargetDropdownFormField extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+// close button
+  Widget _buildActionButton({
+    required String label,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(color: ColorsBets.whiteHD),
+      ),
     );
   }
 }
