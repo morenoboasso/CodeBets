@@ -5,19 +5,15 @@ import '../../models/bet.dart';
 import '../../services/db_service.dart';
 import '../../widgets/bet_card/bet_card_shape.dart';
 import 'package:get_storage/get_storage.dart';
-
 class ActiveBetsPage extends StatefulWidget {
   const ActiveBetsPage({super.key});
-
   @override
   _ActiveBetsPageState createState() => _ActiveBetsPageState();
 }
-
 class _ActiveBetsPageState extends State<ActiveBetsPage> {
   List<Bet> _betList = [];
   bool _isLoading = true;
   late Stream<List<Bet>> _betsStream;
-
 
   @override
   void initState() {
@@ -96,15 +92,15 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
                 Expanded(
                   child: Container(
                     child: _isLoading
-                        ? Center(
+                        ? const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Caricamento..."),
-                          const SizedBox(height: 20),
+                          Text("Caricamento..."),
+                          SizedBox(height: 20),
                           CircularProgressIndicator(
-                            backgroundColor: Colors.orangeAccent,
-                            color: Colors.orange.withOpacity(0.7),
+                            backgroundColor: ColorsBets.orangeHD,
+                            color: ColorsBets.yellowHD,
                           ),
                         ],
                       ),
