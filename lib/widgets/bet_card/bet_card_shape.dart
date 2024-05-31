@@ -97,12 +97,12 @@ class _BetCardState extends State<BetCard> {
           children: [
             if (isCreator)
               Positioned(
-                top: -15,
-                right: -15,
+                top: -17.5,
+                right: -17.5,
                 child: IconButton(
                   tooltip: 'Elimina scommessa',
                   color: ColorsBets.whiteHD,
-                  icon: const Icon(Icons.delete_outline,color: Colors.red,),
+                  icon: const Icon(Icons.delete_outline,color: Colors.red,size: 18,),
                   onPressed: () {
                     showDialog(
                       context: context,

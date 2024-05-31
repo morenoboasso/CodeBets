@@ -18,6 +18,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
   bool _isLoading = true;
   late Stream<List<Bet>> _betsStream;
 
+
   @override
   void initState() {
     super.initState();
@@ -33,9 +34,12 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       });
       _betList = snapshot;
       if (storedUserName != null) {
-        _betList =
-            _betList.where((bet) => bet.target != storedUserName).toList();
+        _betList = _betList.where((bet) => bet.target != storedUserName).toList();
       }
+
+      // Ordina la lista in base alla data di creazione dalla più recente alla meno recente
+      _betList.sort((a, b) => b.creationDate.compareTo(a.creationDate));
+
       setState(() {
         _isLoading = false;
       });
