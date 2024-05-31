@@ -26,6 +26,7 @@ class _BetCardState extends State<BetCard> {
   DbService dbService = DbService();
   bool isAnwerConfirmed = false;
   List<Map<String, String>> _usersList = [];
+  List<Map<String, String>> _votingUsersList = [];
 
   @override
   void initState() {
@@ -33,6 +34,25 @@ class _BetCardState extends State<BetCard> {
     _loadUserAnswer();
     _checkAnswerConfirmation();
     _loadUsers();
+    _loadVotingUsers();
+  }
+
+  Future<void> _loadVotingUsers() async {
+    List<Map<String, String>> votingUsersList =
+    await dbService.getUsersListWithAvatars();
+    List<Map<String, String>> votingUsersWithAnswers = [];
+
+    // Per ogni utente, controlla se ha una risposta selezionata per questa scommessa
+    for (var user in votingUsersList) {
+      String? userAnswer =
+      await dbService.loadUserAnswerForBet(user['name']!, widget.bet.id);
+      if (userAnswer != null && userAnswer.isNotEmpty) {
+        votingUsersWithAnswers.add(user);
+      }
+    }
+    setState(() {
+      _votingUsersList = votingUsersWithAnswers;
+    });
   }
 
   // Metodo per verificare la conferma della risposta dell'utente
@@ -87,7 +107,9 @@ class _BetCardState extends State<BetCard> {
 
     // Numero di persone che hanno votato
     int numVoters = _usersList.where((user) => user['name'] != null).length;
-
+// Aggiornamento del widget per visualizzare il numero di utenti che hanno votato
+    int numVotingUsers = _votingUsersList.length;
+    String votingCountText = '$numVotingUsers/$numVoters';
     return Card(
       surfaceTintColor: ColorsBets.whiteHD,
       shape: RoundedRectangleBorder(
@@ -160,7 +182,7 @@ class _BetCardState extends State<BetCard> {
                       creatorAvatar: creatorAvatar,
                     ),
                     Text(
-                      'Voti: /$numVoters',
+                      'Voti: $votingCountText',
                       style: TextStyleBets.inputTextLogin,
                     ),
                   ],

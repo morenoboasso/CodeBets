@@ -300,4 +300,24 @@ class DbService {
       return false;
     }
   }
+// Carica la risposta dell'utente per una specifica scommessa
+  Future<String?> loadUserAnswerForBet(String userName, String betId) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('risposte')
+          .where('scommessa_id', isEqualTo: betId)
+          .where('utente', isEqualTo: userName)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.get('risposta_scelta');
+      } else {
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Errore durante il recupero della risposta dell'utente per la scommessa: $e");
+      return null;
+    }
+  }
+
 }
