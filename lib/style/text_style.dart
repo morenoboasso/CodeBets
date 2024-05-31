@@ -95,4 +95,19 @@ static TextStyle get selectedAnswer => const TextStyle(
     color: ColorsBets.orangeHD,
     fontSize: 10,
   );
+
+  //profile
+//username
+  static TextStyle get profileUserName =>  const TextStyle(
+    fontWeight: FontWeight.bold,
+    color: ColorsBets.blackHD,
+    fontSize: 28,
+  );
+
+  //variabile profilo
+  static TextStyle get profileVariable =>  const TextStyle(
+    fontWeight: FontWeight.w700,
+    color: ColorsBets.blackHD,
+    fontSize: 18,
+  );
 }
