@@ -63,7 +63,7 @@ class _BetCardState extends State<BetCard> {
   // Caricamento degli utenti
   Future<void> _loadUsers() async {
     List<Map<String, String>> usersList =
-    await dbService.getUsersListWithAvatars();
+        await dbService.getUsersListWithAvatars();
     setState(() {
       _usersList = usersList;
     });
@@ -78,12 +78,15 @@ class _BetCardState extends State<BetCard> {
     String targetName = widget.bet.target;
     String? targetAvatar = _usersList.isNotEmpty
         ? _usersList.firstWhere((user) => user['name'] == targetName,
-        orElse: () => {'pfp': 'default_avatar'})['pfp']
+            orElse: () => {'pfp': 'default_avatar'})['pfp']
         : 'default_avatar';
     String? creatorAvatar = _usersList.isNotEmpty
         ? _usersList.firstWhere((user) => user['name'] == widget.bet.creator,
-        orElse: () => {'pfp': 'default_avatar'})['pfp']
+            orElse: () => {'pfp': 'default_avatar'})['pfp']
         : 'default_avatar';
+
+    // Numero di persone che hanno votato
+    int numVoters = _usersList.where((user) => user['name'] != null).length;
 
     return Card(
       surfaceTintColor: ColorsBets.whiteHD,
@@ -102,7 +105,11 @@ class _BetCardState extends State<BetCard> {
                 child: IconButton(
                   tooltip: 'Elimina scommessa',
                   color: ColorsBets.whiteHD,
-                  icon: const Icon(Icons.delete_outline,color: Colors.red,size: 18,),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: Colors.red,
+                    size: 18,
+                  ),
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -124,12 +131,10 @@ class _BetCardState extends State<BetCard> {
                   },
                 ),
               ),
-
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
                 // Titolo scommessa
                 BetTitle(title: widget.bet.title),
 
@@ -141,16 +146,25 @@ class _BetCardState extends State<BetCard> {
                 // Target scommessa
                 if (widget.bet.target.isNotEmpty)
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    BetTarget(targetName: targetName, targetAvatar: targetAvatar!),
+                    BetTarget(
+                        targetName: targetName, targetAvatar: targetAvatar!),
                   ]),
 
                 // Creatore bet
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  BetCreator(
-                    creatorName: widget.bet.creator,
-                    creatorAvatar: creatorAvatar,
-                  ),
-                ]),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    BetCreator(
+                      creatorName: widget.bet.creator,
+                      creatorAvatar: creatorAvatar,
+                    ),
+                    Text(
+                      'Voti: /$numVoters',
+                      style: TextStyleBets.inputTextLogin,
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 15),
 
                 // Risposte
@@ -173,14 +187,14 @@ class _BetCardState extends State<BetCard> {
                       setState(() {
                         isAnwerConfirmed = true;
                       });
-                      dbService.confirmSelection(widget.bet.id, selectedAnswer!);
+                      dbService.confirmSelection(
+                          widget.bet.id, selectedAnswer!);
                     },
                     isEnabled: true,
                   ),
 
                 // Terminate bet button
-                if (isCreator)
-                  const SizedBox(height: 10),
+                if (isCreator) const SizedBox(height: 10),
                 if (isCreator)
                   TerminateButton(
                     onPressed: () {
