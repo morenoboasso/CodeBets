@@ -55,6 +55,7 @@ class _BetCardState extends State<BetCard> {
     });
   }
 
+
   // Metodo per verificare la conferma della risposta dell'utente
   Future<void> _checkAnswerConfirmation() async {
     String betId = widget.bet.id;

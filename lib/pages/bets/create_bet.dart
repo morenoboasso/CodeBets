@@ -27,6 +27,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
   String _answer4 = '';
   String? _selectedUser;
   List<Map<String, String>> _usersList = [];
+  bool _showThirdAnswer = false;
+  bool _showFourthAnswer = false;
   DbService dbService = DbService();
 
   @override
@@ -135,26 +137,54 @@ class _CreateBetPageState extends State<CreateBetPage> {
                         return null;
                       },
                     ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 3',
-                      hintText: "Es. Yes",
-                      onSaved: (newValue) {
-                        _answer3 = newValue ?? '';
-                      },
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
-                    BetAnswerFormField(
-                      labelText: 'Risposta 4',
-                      hintText: "Es. Nope",
-                      onSaved: (newValue) {
-                        _answer4 = newValue ?? '';
-                      },
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
+                    if (_showThirdAnswer)
+                      BetAnswerFormField(
+                        labelText: 'Risposta 3',
+                        hintText: "Es. Yes",
+                        onSaved: (newValue) {
+                          _answer3 = newValue ?? '';
+                        },
+                        validator: (value) {
+                          return null;
+                        },
+                      ),
+                    if (_showFourthAnswer)
+                      BetAnswerFormField(
+                        labelText: 'Risposta 4',
+                        hintText: "Es. Nope",
+                        onSaved: (newValue) {
+                          _answer4 = newValue ?? '';
+                        },
+                        validator: (value) {
+                          return null;
+                        },
+                      ),
+                    const SizedBox(height: 20),
+                    if (!_showThirdAnswer || (_showThirdAnswer && !_showFourthAnswer))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!_showThirdAnswer) {
+                                  _showThirdAnswer = true;
+                                } else {
+                                  _showFourthAnswer = true;
+                                }
+                              });
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: BorderSide(color: ColorsBets.blueHD, width: 2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text('Aggiungi altre risposte', style: TextStyle(color: ColorsBets.blueHD)),
+                          ),
+                        ],
+                      ),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -179,8 +209,7 @@ class _CreateBetPageState extends State<CreateBetPage> {
                     if (kDebugMode)
                       const Padding(
                         padding: EdgeInsets.only(top: 20),
-                        child:
-                        Center (
+                        child: Center(
                           child: ClearButton(),
                         ),
                       ),
@@ -220,6 +249,8 @@ class _CreateBetPageState extends State<CreateBetPage> {
       _answer2 = '';
       _answer3 = '';
       _answer4 = '';
+      _showThirdAnswer = false;
+      _showFourthAnswer = false;
     });
     FocusScope.of(context).unfocus();
   }

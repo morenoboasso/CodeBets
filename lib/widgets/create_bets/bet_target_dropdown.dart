@@ -1,14 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:codebets/style/text_style.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../style/color_style.dart';
 
 class BetTargetDropdownFormField extends StatelessWidget {
   final List<Map<String, String>> usersList;
   final String? selectedUser;
   final ValueChanged<String?> onChanged;
+  final String? currentUser = GetStorage().read<String>('userName');
 
-  const BetTargetDropdownFormField({
+   BetTargetDropdownFormField({
     super.key,
     required this.usersList,
     required this.selectedUser,
@@ -17,6 +19,8 @@ class BetTargetDropdownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> filteredUsersList = usersList.where((user) => user['name'] != currentUser).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,7 +84,7 @@ class BetTargetDropdownFormField extends StatelessWidget {
                 value: null,
                 child: Text('Nessun target'),
               ),
-              ...usersList.map((Map<String, String> user) {
+              ...filteredUsersList.map((Map<String, String> user) {
                 return DropdownMenuItem<String>(
                   value: user['name'],
                   child: Row(
