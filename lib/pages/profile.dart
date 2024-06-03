@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: TextStyleBets.profileVariable,
                               ),
                               Text(
-                                '${_userData['score'] ?? '0'}',
+                                '${_userData['score'] ?? ''}',
                                 style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD),
                               ),
                             ],
@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: TextStyleBets.profileVariable,
                               ),
                               Text(
-                                '${_userData['scommesse_create'] ?? '0'}',
+                                '${_userData['scommesse_create'] ?? ''}',
                                 style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD),
                               ),
                             ],
@@ -158,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     style: TextStyleBets.profileVariable,
                                   ),
                                   Text(
-                                    '${_userData['scommesse_vinte'] ?? '0'}',
+                                    '${_userData['scommesse_vinte'] ?? ''}',
                                     style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD),
                                   ),
                                 ],
@@ -172,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     style: TextStyleBets.profileVariable,
                                   ),
                                   Text(
-                                    '${_userData['scommesse_perse'] ?? '0'}',
+                                    '${_userData['scommesse_perse'] ?? ''}',
                                     style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD),
                                   ),
                                 ],

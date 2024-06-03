@@ -1,4 +1,7 @@
+import 'package:codebets/style/color_style.dart';
 import 'package:flutter/material.dart';
+
+import '../../style/text_style.dart';
 
 class UserModal extends StatelessWidget {
   final String userName;
@@ -9,30 +12,37 @@ class UserModal extends StatelessWidget {
   final String? userPfp;
 
   const UserModal({
-    Key? key,
+    super.key,
     required this.userName,
     required this.score,
     required this.scommesseCreate,
     required this.scommesseVinte,
     required this.scommessePerse,
     this.userPfp,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      surfaceTintColor: ColorsBets.whiteHD,
+      backgroundColor: ColorsBets.whiteHD,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: const BorderSide(color: ColorsBets.blueHD, width: 3.5),
+      ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(width: 35,),
+          Container(width: 35),
           Center(
-            child: Text(userName),
-          ),
+              child: Text(
+            userName,
+            style: TextStyleBets.profileUserName,
+          )),
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
           ),
-
         ],
       ),
       content: Column(
@@ -55,25 +65,54 @@ class UserModal extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(userPfp!),
+                  backgroundImage: NetworkImage(userPfp ?? "https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369"),
                 ),
               ),
             ),
           const SizedBox(height: 20),
           Center(
-            child: Text('Punteggio: $score'),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                'Punteggio: ',
+                style: TextStyleBets.profileVariable,
+              ),
+              Text(
+                '$score',
+                style: TextStyleBets.profileVariable
+                  .copyWith(color: ColorsBets.blueHD),
+              ),
+            ]),
           ),
           const SizedBox(height: 10),
           Center(
-            child: Text('Scommesse create: $scommesseCreate'),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                'Scommesse create: ', style: TextStyleBets.profileVariable,
+              ),
+              Text('$scommesseCreate', style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD)),
+            ]),
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Vinte: $scommesseVinte'),
+              Center(
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    'Vinte: ', style: TextStyleBets.profileVariable,
+                  ),
+                  Text('$scommesseVinte', style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD)),
+                ]),
+              ),
               const SizedBox(width: 20),
-              Text('Perse: $scommessePerse'),
+              Center(
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    'Perse: ', style: TextStyleBets.profileVariable,
+                  ),
+                  Text('$scommessePerse', style: TextStyleBets.profileVariable.copyWith(color: ColorsBets.blueHD)),
+                ]),
+              ),
             ],
           ),
         ],

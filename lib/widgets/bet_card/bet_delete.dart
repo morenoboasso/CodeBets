@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:codebets/style/color_style.dart';
-
 import '../../style/text_style.dart';
 
 class DeleteConfirmationModal extends StatelessWidget {
