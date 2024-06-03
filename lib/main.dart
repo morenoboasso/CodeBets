@@ -135,9 +135,7 @@ class _LoginPageState extends State<LoginPage>
                   },
                 ),
                 const SizedBox(height: 20,),
-                Text(
-                  "Login",
-                  style: TextStyleBets.titleBlue,
+                Text("Login", style: TextStyleBets.titleBlue,
                 ),
                 const SizedBox(height: 40,),
                 SizedBox(

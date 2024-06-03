@@ -110,4 +110,19 @@ static TextStyle get selectedAnswer => const TextStyle(
     color: ColorsBets.blackHD,
     fontSize: 18,
   );
+
+  //leaderboard
+//user card text
+  static TextStyle get userLeaderboardText =>  const TextStyle(
+    fontWeight: FontWeight.w700,
+    color: ColorsBets.orangeHD,
+    fontSize: 15,
+  );
+
+  static TextStyle get userPositionLeader => const TextStyle(
+    fontWeight: FontWeight.w900,
+    color: ColorsBets.blueHD,
+      fontSize: 20
+  );
+
 }
