@@ -19,7 +19,7 @@ class BetTarget extends StatelessWidget {
             style: TextStyle(fontSize: 14,color: ColorsBets.blackHD, fontWeight: FontWeight.bold),
           ),
           CircleAvatar(
-            backgroundImage: NetworkImage(targetAvatar),
+            backgroundImage: NetworkImage(targetAvatar ),
             radius: 15,
             backgroundColor: ColorsBets.whiteHD,
           ),

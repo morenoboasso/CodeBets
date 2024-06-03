@@ -67,8 +67,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _logout() {
-    _storage.remove('userName'); // Rimuovi il nome memorizzato
-    Navigator.pushReplacement( // Reindirizza alla schermata di login
+    _storage.remove('userName');
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
     );
@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               radius: 80,
                               backgroundColor: Colors.transparent,
                               backgroundImage: NetworkImage(_userData['pfp'] ??
-                                  'https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369'),
+                                  "https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369",),
                             ),
                           ),
                           const SizedBox(height: 10),

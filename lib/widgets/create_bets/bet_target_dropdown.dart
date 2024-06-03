@@ -90,7 +90,8 @@ class BetTargetDropdownFormField extends StatelessWidget {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(user['pfp']!),
+                        backgroundImage: NetworkImage(user['pfp'] ??
+                            "https://thebowlcut.com/cdn/shop/t/41/assets/loading.gif?v=157493769327766696621701744369",),
                         radius: 12,
                         backgroundColor: ColorsBets.whiteHD,
                       ),
