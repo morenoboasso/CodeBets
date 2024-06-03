@@ -1,3 +1,4 @@
+import 'package:codebets/style/color_style.dart';
 import 'package:flutter/material.dart';
 import '../services/db_service.dart';
 import '../services/leaderboard_filter.dart';
@@ -112,6 +113,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     List<MapEntry<String, int>> sortedUsers = _getSortedUsers();
 
     return RefreshIndicator(
+      color: ColorsBets.yellowHD,
+      backgroundColor: ColorsBets.whiteHD,
       onRefresh: _fetchUsersData,
       child: ListView.builder(
         itemCount: sortedUsers.length,
