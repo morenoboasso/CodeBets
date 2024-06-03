@@ -38,7 +38,7 @@ class UserCard extends StatelessWidget {
     } else if (index == totalUsers - 1) {
       leadingIcon = const Text('💩', style: TextStyle(fontSize: 20)); // Ultimo utente
     } else {
-      leadingIcon = Text(' ${index + 1}°', style: TextStyleBets.userPositionLeader); //altri posti
+      leadingIcon = Text(' ${index + 1}°', style:isCurrentUser ? TextStyleBets.userSelfPositionLeader :  TextStyleBets.userPositionLeader); //altri posti
     }
 
     return GestureDetector(
@@ -46,10 +46,10 @@ class UserCard extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
-          side:  BorderSide(color:isCurrentUser ? ColorsBets.orangeHD : ColorsBets.blueHD, width: 2),
+          side:  BorderSide(color:isCurrentUser ? ColorsBets.blueHD : ColorsBets.blueHD, width: 2),
         ),
-        surfaceTintColor: isCurrentUser ? ColorsBets.blackHD : ColorsBets.whiteHD,
-        color: isCurrentUser ? ColorsBets.blackHD : ColorsBets.whiteHD,
+        surfaceTintColor: isCurrentUser ? ColorsBets.blueHD : ColorsBets.whiteHD,
+        color: isCurrentUser ? ColorsBets.blueHD : ColorsBets.whiteHD,
         margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 25.0),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -67,11 +67,11 @@ class UserCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              Expanded(child: Text(userName, style: TextStyleBets.userLeaderboardText)),
+              Expanded(child: Text(isCurrentUser? "Tu" : userName, style:isCurrentUser ? TextStyleBets.userSelfLeaderboardText : TextStyleBets.userLeaderboardText)),
               const SizedBox(width: 10),
               Text(
                 '$score',
-                style: TextStyleBets.userLeaderboardText,
+                style:isCurrentUser ? TextStyleBets.userSelfLeaderboardText :  TextStyleBets.userLeaderboardText,
               ),
               const SizedBox(width: 10),
             ],

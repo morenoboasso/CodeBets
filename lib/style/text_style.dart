@@ -118,10 +118,20 @@ static TextStyle get selectedAnswer => const TextStyle(
     color: ColorsBets.orangeHD,
     fontSize: 15,
   );
+  static TextStyle get userSelfLeaderboardText =>  const TextStyle(
+    fontWeight: FontWeight.w700,
+    color: ColorsBets.whiteHD,
+    fontSize: 15,
+  );
 
   static TextStyle get userPositionLeader => const TextStyle(
     fontWeight: FontWeight.w900,
     color: ColorsBets.blueHD,
+      fontSize: 20
+  );
+  static TextStyle get userSelfPositionLeader => const TextStyle(
+      fontWeight: FontWeight.w900,
+      color: ColorsBets.whiteHD,
       fontSize: 20
   );
 
