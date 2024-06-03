@@ -68,13 +68,14 @@ class DeleteConfirmationModal extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.red, width: 2.5),
+                color: Colors.red
               ),
               child: TextButton(
                 onPressed: onDelete,
                 child: const Text(
                   'Elimina',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: ColorsBets.whiteHD,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

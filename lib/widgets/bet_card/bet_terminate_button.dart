@@ -16,7 +16,7 @@ class TerminateButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isEnabled ? onPressed : null,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isEnabled ? ColorsBets.whiteHD : ColorsBets.blackHD,
+        backgroundColor: isEnabled ? Colors.red : ColorsBets.blackHD,
         surfaceTintColor: ColorsBets.whiteHD,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -28,7 +28,7 @@ class TerminateButton extends StatelessWidget {
         children: [
           Icon(
             Icons.cancel_outlined,
-            color: isEnabled ? Colors.red : ColorsBets.blackHD,
+            color: isEnabled ? ColorsBets.whiteHD : ColorsBets.blackHD,
             size: 20,
           ),
           const SizedBox(width: 4),
@@ -36,7 +36,7 @@ class TerminateButton extends StatelessWidget {
             'Termina',
             style: TextStyle(
               fontSize: 17,
-              color: isEnabled ? Colors.red : ColorsBets.blackHD,
+              color: isEnabled ? ColorsBets.whiteHD : ColorsBets.blackHD,
               fontWeight: FontWeight.bold,
             ),
           ),
