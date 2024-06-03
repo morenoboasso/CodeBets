@@ -39,13 +39,13 @@ class _BetCardState extends State<BetCard> {
 
   Future<void> _loadVotingUsers() async {
     List<Map<String, String>> votingUsersList =
-    await dbService.getUsersListWithAvatars();
+        await dbService.getUsersListWithAvatars();
     List<Map<String, String>> votingUsersWithAnswers = [];
 
     // Per ogni utente, controlla se ha una risposta selezionata per questa scommessa
     for (var user in votingUsersList) {
       String? userAnswer =
-      await dbService.loadUserAnswerForBet(user['name']!, widget.bet.id);
+          await dbService.loadUserAnswerForBet(user['name']!, widget.bet.id);
       if (userAnswer != null && userAnswer.isNotEmpty) {
         votingUsersWithAnswers.add(user);
       }
@@ -54,7 +54,6 @@ class _BetCardState extends State<BetCard> {
       _votingUsersList = votingUsersWithAnswers;
     });
   }
-
 
   // Metodo per verificare la conferma della risposta dell'utente
   Future<void> _checkAnswerConfirmation() async {
@@ -108,9 +107,10 @@ class _BetCardState extends State<BetCard> {
 
     // Numero di persone che hanno votato
     int numVoters = _usersList.where((user) => user['name'] != null).length;
-// Aggiornamento del widget per visualizzare il numero di utenti che hanno votato
+    // Aggiornamento del widget per visualizzare il numero di utenti che hanno votato
     int numVotingUsers = _votingUsersList.length;
     String votingCountText = '$numVotingUsers/$numVoters';
+
     return Card(
       surfaceTintColor: ColorsBets.whiteHD,
       shape: RoundedRectangleBorder(
@@ -119,129 +119,126 @@ class _BetCardState extends State<BetCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(15),
-        child: Stack(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (isCreator)
-              Positioned(
-                top: -17.5,
-                right: -17.5,
-                child: IconButton(
-                  tooltip: 'Elimina scommessa',
-                  color: ColorsBets.whiteHD,
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                    size: 18,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return DeleteConfirmationModal(
-                          onDelete: () async {
-                            // Chiamata per eliminare la scommessa
-                            await dbService.deleteBet(widget.bet.id);
-                            // Chiudi la modal
-                            Navigator.of(context).pop();
-                          },
-                          onCancel: () {
-                            // Chiudi la modal
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // Titolo scommessa
+            BetTitle(title: widget.bet.title),
+
+            // Descrizione scommessa
+            if (widget.bet.description.isNotEmpty)
+              BetDescription(description: widget.bet.description),
+            const SizedBox(height: 5),
+
+            // Target scommessa
+            if (widget.bet.target.isNotEmpty)
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                BetTarget(targetName: targetName, targetAvatar: targetAvatar!),
+              ]),
+
+            // Creatore bet
+            Row(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Titolo scommessa
-                BetTitle(title: widget.bet.title),
-
-                // Descrizione scommessa
-                if (widget.bet.description.isNotEmpty)
-                  BetDescription(description: widget.bet.description),
-                const SizedBox(height: 5),
-
-                // Target scommessa
-                if (widget.bet.target.isNotEmpty)
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    BetTarget(
-                        targetName: targetName, targetAvatar: targetAvatar!),
-                  ]),
-
-                // Creatore bet
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BetCreator(
-                      creatorName: widget.bet.creator,
-                      creatorAvatar: creatorAvatar,
-                    ),
-                    Text(
-                      'Voti: $votingCountText',
-                      style: TextStyleBets.inputTextLogin,
-                    ),
-                  ],
+                BetCreator(
+                  creatorName: widget.bet.creator,
+                  creatorAvatar: creatorAvatar,
                 ),
-                const SizedBox(height: 15),
-
-                // Risposte
-                BetAnswers(
-                  bet: widget.bet,
-                  selectedAnswer: selectedAnswer,
-                  isAnswerConfirmed: isAnwerConfirmed,
-                  onTap: selectAnswer,
+                Text(
+                  'Voti: $votingCountText',
+                  style: TextStyleBets.inputTextLogin,
                 ),
+              ],
+            ),
+            const SizedBox(height: 15),
 
-                if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
-                    !isAnwerConfirmed)
-                  const SizedBox(height: 15),
+            // Risposte
+            BetAnswers(
+              bet: widget.bet,
+              selectedAnswer: selectedAnswer,
+              isAnswerConfirmed: isAnwerConfirmed,
+              onTap: selectAnswer,
+            ),
 
-                // Conferma risposta bet
-                if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
-                    !isAnwerConfirmed)
-                  ConfirmButton(
-                    onPressed: () {
-                      setState(() {
-                        isAnwerConfirmed = true;
-                      });
-                      dbService.confirmSelection(
-                          widget.bet.id, selectedAnswer!);
+            if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
+                !isAnwerConfirmed)
+              const SizedBox(height: 15),
+
+            // Conferma risposta bet
+            if ((selectedAnswer != null && selectedAnswer!.isNotEmpty) &&
+                !isAnwerConfirmed)
+              ConfirmButton(
+                onPressed: () {
+                  setState(() {
+                    isAnwerConfirmed = true;
+                  });
+                  dbService.confirmSelection(widget.bet.id, selectedAnswer!);
+                },
+                isEnabled: true,
+              ),
+
+            // Terminate bet button
+            if (isCreator) const SizedBox(height: 10),
+            if (isCreator)
+              TerminateButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogTerminateBet(bet: widget.bet);
                     },
-                    isEnabled: true,
-                  ),
+                  );
+                },
+                isEnabled: true,
+              ),
 
-                // Terminate bet button
-                if (isCreator) const SizedBox(height: 10),
+            // Data della scommessa e icona di eliminazione
+            const SizedBox(height: 5),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 if (isCreator)
-                  TerminateButton(
+                  IconButton(
+                    tooltip: 'Elimina scommessa',
+                    color: ColorsBets.whiteHD,
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: Colors.red,
+                      size: 24,
+                    ),
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return DialogTerminateBet(bet: widget.bet);
+                          return DeleteConfirmationModal(
+                            onDelete: () async {
+                              // Chiamata per eliminare la scommessa
+                              await dbService.deleteBet(widget.bet.id);
+                              // Chiudi la modal
+                              Navigator.of(context).pop();
+                            },
+                            onCancel: () {
+                              // Chiudi la modal
+                              Navigator.of(context).pop();
+                            },
+                          );
                         },
                       );
                     },
-                    isEnabled: true,
                   ),
-
-                // Data della scommessa
-                const SizedBox(height: 5),
-                Align(
-                  alignment: Alignment.centerRight,
+                Expanded(
                   child: Text(
                     widget.bet.creationDate,
                     style: TextStyleBets.betsDate,
+                    textAlign: TextAlign.right,
                   ),
                 ),
               ],
             ),
+
           ],
         ),
       ),
