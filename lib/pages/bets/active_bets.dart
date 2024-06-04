@@ -5,11 +5,16 @@ import '../../models/bet.dart';
 import '../../services/db_service.dart';
 import '../../widgets/bet_card/bet_card_shape.dart';
 import 'package:get_storage/get_storage.dart';
+
+import '../../widgets/intro_screen.dart';
+
 class ActiveBetsPage extends StatefulWidget {
   const ActiveBetsPage({super.key});
+
   @override
   _ActiveBetsPageState createState() => _ActiveBetsPageState();
 }
+
 class _ActiveBetsPageState extends State<ActiveBetsPage> {
   List<Bet> _betList = [];
   bool _isLoading = true;
@@ -47,7 +52,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-           const Text("Nessuna scommessa al momento",style: TextStyle(color: ColorsBets.blueHD)),
+          const Text("Nessuna scommessa al momento", style: TextStyle(color: ColorsBets.blueHD)),
           const SizedBox(height: 10),
           ClipOval(
             child: Container(
@@ -57,8 +62,8 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
               child: Image.asset(
                 "assets/error.gif",
                 fit: BoxFit.fill,
+              ),
             ),
-          ),
           ),
         ],
       ),
@@ -84,10 +89,25 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
           SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                 Text(
-                  "Scommesse Attive",
-                  style: TextStyleBets.activeBetTitle,
+                AppBar(
+                  centerTitle: true,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  title: Text(
+                    "Scommesse Attive",
+                    style: TextStyleBets.activeBetTitle,
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.info_outline_rounded),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const IntroScreen()),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: Container(

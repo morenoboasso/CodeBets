@@ -135,4 +135,17 @@ static TextStyle get selectedAnswer => const TextStyle(
       fontSize: 20
   );
 
+  //onboarding
+  static TextStyle get onboardTitle => const TextStyle(
+      fontWeight: FontWeight.w900,
+      color: ColorsBets.blueHD,
+      fontSize: 24
+  );
+
+  static TextStyle get onboardBody => const TextStyle(
+      fontWeight: FontWeight.w700,
+      color: ColorsBets.blackHD,
+      fontSize: 18
+  );
+
 }

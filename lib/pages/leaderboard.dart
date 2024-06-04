@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:codebets/style/color_style.dart';
 import 'package:flutter/material.dart';
 import '../services/db_service.dart';
@@ -81,7 +82,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           Column(
             children: [
               AppBar(
-                title: Text(_appBarTitle,style: TextStyleBets.activeBetTitle,),
+                title: AutoSizeText(
+                  _appBarTitle,
+                  style: TextStyleBets.activeBetTitle,
+                minFontSize: 14,
+                maxLines: 1,),
                 centerTitle: true,
                 actions: [
                   LeaderboardFilter(

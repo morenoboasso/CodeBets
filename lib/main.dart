@@ -23,14 +23,14 @@ void main() async {
     debugPrint('APP INSTALLED!');
   });
 
-  // Controlla se esiste un nome utente memorizzato nelle shared preferences
+  // Check if a username is stored in GetStorage
   String? storedUserName = GetStorage().read<String>('userName');
   if (storedUserName != null) {
-    // Se esiste, naviga direttamente alla schermata principale
+    // If it exists, navigate directly to the main screen
     runApp(const MyApp(initialRoute: AppRoutes.mainScreen));
   } else {
-    // Altrimenti, mostra la schermata di login
-    runApp(const MyApp(initialRoute: AppRoutes.login));
+    // Otherwise, show the intro screen
+    runApp(const MyApp(initialRoute: AppRoutes.intro));
   }
 }
 
