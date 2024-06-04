@@ -24,7 +24,7 @@ class IntroScreen extends StatelessWidget {
       PageViewModel(
         image: Image.asset('assets/intro_2.jpg'),
         title: "Crea e Partecipa alle Scommesse",
-        body: "Metti alla prova la tua astuzia! Crea la tua scommessa e sfida i tuoi colleghi.",
+        body: "Metti alla prova la tua astuzia!\nCrea la tua scommessa e sfida i tuoi colleghi.",
         decoration: PageDecoration(
           titleTextStyle: TextStyleBets.onboardTitle,
           bodyTextStyle: TextStyleBets.onboardBody,
@@ -34,7 +34,7 @@ class IntroScreen extends StatelessWidget {
       PageViewModel(
         image: Image.asset('assets/intro_3.jpg'),
         title: "Il Punteggio",
-        body: "Scommetti e guadagna punti!\n5 punti se indovini, 2 se sei il target. Chi arriverà in cima alla classifica?",
+        body: "Scommetti e guadagna punti!\n5 punti se indovini, 2 se sei il target.\nChi arriverà in cima alla classifica?",
         decoration: PageDecoration(
           titleTextStyle: TextStyleBets.onboardTitle,
           bodyTextStyle: TextStyleBets.onboardBody,
@@ -44,7 +44,7 @@ class IntroScreen extends StatelessWidget {
       PageViewModel(
         image: Image.asset('assets/intro_4.jpg'),
         title: "La Classifica",
-        body: "Scala la classifica e diventa il re delle scommesse! Vinci più punti, fai più scommesse e diventa il piu... ludopatico?",
+        body: "Scala la classifica e diventa il re delle scommesse!\nVinci più punti, fai più scommesse e diventa il piu... ludopatico?",
         decoration: PageDecoration(
           titleTextStyle: TextStyleBets.onboardTitle,
           bodyTextStyle: TextStyleBets.onboardBody,
