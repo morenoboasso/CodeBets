@@ -2,6 +2,9 @@ import 'package:codebets/style/color_style.dart';
 import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:get_storage/get_storage.dart'; // Import GetStorage
+import 'package:get/get.dart'; // Import Get for navigation
+import 'package:codebets/routes.dart'; // Import routes
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -66,8 +69,15 @@ class IntroScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: IntroductionScreen(
-          done: Text("Scommetti", style: TextStyleBets.dialogTitle.copyWith(fontSize: 14)),
-          onDone: () { Navigator.of(context).pop(); },
+          done: Text("Inizia", style: TextStyleBets.dialogTitle.copyWith(fontSize: 14)),
+          onDone: () {
+            String? storedUserName = GetStorage().read<String>('userName');
+            if (storedUserName != null) {
+              Get.offAllNamed(AppRoutes.mainScreen);
+            } else {
+              Get.offAllNamed(AppRoutes.login);
+            }
+          },
           pages: getPages(),
           globalBackgroundColor: ColorsBets.whiteHD,
           showNextButton: true,
