@@ -2,9 +2,9 @@ import 'package:codebets/style/color_style.dart';
 import 'package:codebets/style/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:get_storage/get_storage.dart'; // Import GetStorage
-import 'package:get/get.dart'; // Import Get for navigation
-import 'package:codebets/routes.dart'; // Import routes
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
+import 'package:codebets/routes.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -78,6 +78,13 @@ class IntroScreen extends StatelessWidget {
               Get.offAllNamed(AppRoutes.login);
             }
           },
+          dotsDecorator: DotsDecorator(
+          activeColor: ColorsBets.blueHD,
+            color: ColorsBets.blueHD.withOpacity(0.3),
+            activeShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+          ),
           pages: getPages(),
           globalBackgroundColor: ColorsBets.whiteHD,
           showNextButton: true,
