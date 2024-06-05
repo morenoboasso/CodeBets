@@ -1,6 +1,6 @@
+import 'package:codebets/pages/ping_pong/pingpong_choose_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:codebets/style/color_style.dart';
-import 'package:codebets/pages/ping_pong.dart';
 import 'package:codebets/pages/profile.dart';
 import 'bets/active_bets.dart';
 import 'bets/create_bet.dart';
@@ -21,7 +21,7 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     const ActiveBetsPage(),
     const CreateBetPage(),
     const LeaderboardPage(),
-    const PingPongPage(),
+    const ModeSelectionPage(),
     const ProfilePage(),
   ];
 

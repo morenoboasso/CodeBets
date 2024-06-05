@@ -45,6 +45,7 @@ dependencies:
   auto_size_text: ^3.0.0
   cached_network_image: ^3.3.1
   introduction_screen: ^3.1.14
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:
