@@ -112,15 +112,12 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
                 Expanded(
                   child: Container(
                     child: _isLoading
-                        ? const Center(
+                        ?  const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Caricamento..."),
-                          SizedBox(height: 20),
                           CircularProgressIndicator(
-                            backgroundColor: ColorsBets.orangeHD,
-                            color: ColorsBets.yellowHD,
+                            color: ColorsBets.blueHD,
                           ),
                         ],
                       ),

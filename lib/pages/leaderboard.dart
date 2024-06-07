@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:codebets/style/color_style.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,11 @@ class LeaderboardPage extends StatefulWidget {
 
 enum OrderBy { highestScore, lowestScore, mostCreatedBets, mostWonBets, mostLostBets }
 
-class _LeaderboardPageState extends State<LeaderboardPage> {
+class _LeaderboardPageState extends State<LeaderboardPage> with TickerProviderStateMixin {
   Map<String, dynamic> _usersData = {};
   OrderBy _orderBy = OrderBy.highestScore;
   String _appBarTitle = 'Classifica';
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -28,9 +31,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Future<void> _fetchUsersData() async {
+    setState(() {
+      _isLoading = true;
+    });
     Map<String, dynamic> usersData = await DbService().getUsersData();
     setState(() {
       _usersData = usersData;
+      _isLoading = false;
     });
   }
 
@@ -85,8 +92,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 title: AutoSizeText(
                   _appBarTitle,
                   style: TextStyleBets.activeBetTitle,
-                minFontSize: 14,
-                maxLines: 1,),
+                  minFontSize: 14,
+                  maxLines: 1,
+                ),
                 centerTitle: true,
                 actions: [
                   LeaderboardFilter(
@@ -115,8 +123,12 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Widget _buildLeaderboard() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: ColorsBets.blueHD,),
+      );
+    }
     List<MapEntry<String, int>> sortedUsers = _getSortedUsers();
-
     return RefreshIndicator(
       color: ColorsBets.yellowHD,
       backgroundColor: ColorsBets.whiteHD,
