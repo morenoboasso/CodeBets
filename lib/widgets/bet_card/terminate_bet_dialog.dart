@@ -67,7 +67,7 @@ class _DialogTerminateBetState extends State<DialogTerminateBet> {
                   const SizedBox(width: 10),
                   _buildActionButton(
                     label: 'Conferma',
-                    color: ColorsBets.orangeHD,
+                    color: ColorsBets.greenHD,
                     onPressed: selectedAnswer != null ? () {
                       // Output della risposta selezionata in debug
                       debugPrint('Risposta vincente: $selectedAnswer');

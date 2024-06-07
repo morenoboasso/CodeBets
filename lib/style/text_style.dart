@@ -143,7 +143,7 @@ static TextStyle get selectedAnswer => const TextStyle(
   );
 
   static TextStyle get onboardBody => const TextStyle(
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w400,
       color: ColorsBets.blackHD,
       fontSize: 18
   );

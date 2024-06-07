@@ -1,4 +1,3 @@
-import 'package:codebets/pages/ping_pong/pingpong_choose_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:codebets/style/color_style.dart';
 import 'package:codebets/pages/profile.dart';
@@ -21,7 +20,6 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     const ActiveBetsPage(),
     const CreateBetPage(),
     const LeaderboardPage(),
-    const ModeSelectionPage(),
     const ProfilePage(),
   ];
 
@@ -55,8 +53,7 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
                 _buildNavigationBarItem(Icons.question_answer, 'Attive', 0),
                 _buildNavigationBarItem(Icons.add_box, 'Crea', 1),
                 _buildNavigationBarItem(Icons.emoji_events, 'Classifica', 2),
-                _buildNavigationBarItem(Icons.sports_baseball_rounded, 'Ping Pong', 3),
-                _buildNavigationBarItem(Icons.person, 'Profilo', 4),
+               // _buildNavigationBarItem(Icons.person, 'Profilo', 4),
               ],
               currentIndex: _selectedIndex,
               selectedItemColor: ColorsBets.blueHD,
