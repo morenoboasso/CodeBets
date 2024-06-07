@@ -32,10 +32,10 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // To make sure the body is drawn behind the bottom navigation bar
+      extendBody: true,
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0,left: 15,right: 15,top: 5),
+        padding: const EdgeInsets.only(bottom: 10.0,left: 45,right: 45,top: 5),
         child: Container(
           decoration: BoxDecoration(
             color: ColorsBets.whiteHD,
@@ -53,7 +53,7 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
                 _buildNavigationBarItem(Icons.question_answer, 'Attive', 0),
                 _buildNavigationBarItem(Icons.add_box, 'Crea', 1),
                 _buildNavigationBarItem(Icons.emoji_events, 'Classifica', 2),
-               // _buildNavigationBarItem(Icons.person, 'Profilo', 4),
+                _buildNavigationBarItem(Icons.person, 'Profilo', 4),
               ],
               currentIndex: _selectedIndex,
               selectedItemColor: ColorsBets.blueHD,
