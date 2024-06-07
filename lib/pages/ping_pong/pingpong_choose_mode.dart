@@ -28,13 +28,13 @@ class ModeSelectionPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TeamCreationPage(players: 2),
+                        builder: (context) => const TeamCreationPage(players: 2, isSingleMode: true),
                       ),
                     );
                   },
                   borderColor: ColorsBets.blueHD,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
                 const Row(
                   children: [
                     Expanded(
@@ -63,7 +63,7 @@ class ModeSelectionPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
                 _buildModeButton(
                   context: context,
                   label: ' 2 vs 2 ',
@@ -72,7 +72,7 @@ class ModeSelectionPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TeamCreationPage(players: 4),
+                        builder: (context) => const TeamCreationPage(players: 4, isSingleMode: false),
                       ),
                     );
                   },
