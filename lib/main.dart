@@ -18,7 +18,6 @@ void main() async {
   );
   await GetStorage.init(); // Inizializza GetStorage
 
-  //pwa installing check
   PWAInstall().setup(installCallback: () {
     debugPrint('APP INSTALLED!');
   });

@@ -6,8 +6,6 @@
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
     "description" : "CodeBets è totalmente legale.",
-    "orientation": "portrait-primary",
-    "prefer_related_applications": false,
     "icons": [
         {
             "src": "icons/Icon-192x192.png",
