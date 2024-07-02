@@ -28,15 +28,11 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
   }
 
   Future<void> _loadBets() async {
-    String? storedUserName = GetStorage().read<String>('userName');
     await for (List<Bet> snapshot in _betsStream) {
       setState(() {
         _isLoading = true;
       });
       _betList = snapshot;
-      if (storedUserName != null) {
-        _betList = _betList.where((bet) => bet.target != storedUserName).toList();
-      }
 
       // Ordina la lista in base alla data di creazione dalla più recente alla meno recente
       _betList.sort((a, b) => b.creationDate.compareTo(a.creationDate));
@@ -102,8 +98,8 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
                       icon: const Icon(Icons.info_outline_rounded),
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const IntroScreen()),
+                          context,
+                          MaterialPageRoute(builder: (context) => const IntroScreen()),
                         );
                       },
                     ),
@@ -112,7 +108,7 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
                 Expanded(
                   child: Container(
                     child: _isLoading
-                        ?  const Center(
+                        ? const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -130,14 +126,12 @@ class _ActiveBetsPageState extends State<ActiveBetsPage> {
                           delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                               return Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    20, 10, 20, 20),
+                                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                                 child: InkWell(
                                   onTap: () {},
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: BetCard(
                                       bet: _betList[index],

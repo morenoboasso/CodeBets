@@ -58,9 +58,10 @@ class BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
               currentIndex: _selectedIndex,
               selectedItemColor: ColorsBets.blueHD,
               unselectedItemColor: ColorsBets.blackHD.withOpacity(0.4),
-              showSelectedLabels: true, // Hide selected labels
-              showUnselectedLabels: false, // Hide unselected labels
+              showSelectedLabels: true,
+              showUnselectedLabels: false,
               onTap: _onItemTapped,
+              backgroundColor: ColorsBets.whiteHD,
             ),
           ),
         ),
